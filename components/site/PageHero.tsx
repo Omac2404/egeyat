@@ -11,7 +11,8 @@ export function PageHero({
 }) {
   return (
     <section className="bg-navy-900 text-white">
-      <div className="mx-auto max-w-6xl px-4 py-14">
+      {/* Üstteki boşluk: yüzen header'ın altında kalan alan */}
+      <div className="mx-auto max-w-6xl px-4 pb-14 pt-40">
         <nav className="mb-3 flex flex-wrap items-center gap-1.5 text-xs text-navy-200">
           <Link href="/" className="hover:text-orange-400">
             Ana Sayfa

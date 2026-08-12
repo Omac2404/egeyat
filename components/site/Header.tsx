@@ -25,10 +25,11 @@ export function Header() {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <header className="sticky top-0 z-40 bg-white shadow-sm">
-      {/* Üst bar — kenarlardan kesik, alt köşeleri yumuşak oval */}
-      <div className="mx-auto max-w-7xl rounded-b-2xl bg-navy-900 text-white">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-1.5 text-xs">
+    // Sayfanın üstünde yüzer; hero header'ın altına uzanır
+    <header className="fixed inset-x-0 top-0 z-40">
+      {/* Üst bar — dar, alt köşeleri oval */}
+      <div className="mx-auto max-w-6xl rounded-b-2xl bg-navy-900 text-white">
+        <div className="flex items-center justify-between gap-4 px-5 py-1.5 text-xs">
           <div className="flex items-center gap-4">
             <a
               href={site.phoneHref}
@@ -68,133 +69,135 @@ export function Header() {
         </div>
       </div>
 
-      {/* Ana bar */}
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-3">
-        <Link href="/" className="shrink-0" onClick={() => setOpen(false)}>
-          <Image
-            src="/logo.png"
-            alt="Ege Yatçılık — Gemi Acenteliği Müşavirlik"
-            width={220}
-            height={58}
-            priority
-            className="h-11 w-auto sm:h-13"
-          />
-        </Link>
+      {/* Ana bar — üst bardan geniş, köşeleri oval, kenarlardan kesik */}
+      <div className="mx-auto max-w-7xl rounded-2xl bg-white shadow-md shadow-navy-950/10">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-5 py-3">
+          <Link href="/" className="shrink-0" onClick={() => setOpen(false)}>
+            <Image
+              src="/logo.png"
+              alt="Ege Yatçılık — Gemi Acenteliği Müşavirlik"
+              width={220}
+              height={58}
+              priority
+              className="h-11 w-auto sm:h-13"
+            />
+          </Link>
 
-        {/* Masaüstü menü */}
-        <nav className="hidden items-center gap-1 lg:flex">
-          {navItems.map((item) =>
-            item.hasDropdown ? (
-              <div key={item.href} className="group relative">
+          {/* Masaüstü menü */}
+          <nav className="hidden items-center gap-1 lg:flex">
+            {navItems.map((item) =>
+              item.hasDropdown ? (
+                <div key={item.href} className="group relative">
+                  <Link
+                    href={item.href}
+                    className={`flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+                      isActive(item.href)
+                        ? "text-orange-600"
+                        : "text-navy-900 hover:text-orange-600"
+                    }`}
+                  >
+                    {item.label}
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      className="size-3.5"
+                    >
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </Link>
+                  <div className="invisible absolute left-0 top-full w-72 pt-1 opacity-0 transition group-hover:visible group-hover:opacity-100">
+                    <div className="rounded-xl border border-line bg-white p-2 shadow-lg">
+                      {services.map((s) => (
+                        <Link
+                          key={s.slug}
+                          href={`/hizmetlerimiz/${s.slug}`}
+                          className="block rounded-lg px-3 py-2 text-sm font-medium text-navy-900 hover:bg-navy-50 hover:text-orange-600"
+                        >
+                          {s.title}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
                 <Link
+                  key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+                  className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
                     isActive(item.href)
                       ? "text-orange-600"
                       : "text-navy-900 hover:text-orange-600"
                   }`}
                 >
                   {item.label}
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    className="size-3.5"
-                  >
-                    <path d="m6 9 6 6 6-6" />
-                  </svg>
                 </Link>
-                <div className="invisible absolute left-0 top-full w-72 pt-1 opacity-0 transition group-hover:visible group-hover:opacity-100">
-                  <div className="rounded-xl border border-line bg-white p-2 shadow-lg">
-                    {services.map((s) => (
-                      <Link
-                        key={s.slug}
-                        href={`/hizmetlerimiz/${s.slug}`}
-                        className="block rounded-lg px-3 py-2 text-sm font-medium text-navy-900 hover:bg-navy-50 hover:text-orange-600"
-                      >
-                        {s.title}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
-                  isActive(item.href)
-                    ? "text-orange-600"
-                    : "text-navy-900 hover:text-orange-600"
-                }`}
-              >
-                {item.label}
-              </Link>
-            )
-          )}
-          <Link
-            href="/iletisim"
-            className="ml-2 rounded-lg bg-orange-600 px-4 py-2 text-sm font-bold text-white transition hover:bg-orange-700"
-          >
-            Teklif Alın
-          </Link>
-        </nav>
-
-        {/* Mobil menü butonu */}
-        <button
-          type="button"
-          onClick={() => setOpen(!open)}
-          className="rounded-lg p-2 text-navy-900 lg:hidden"
-          aria-label="Menü"
-          aria-expanded={open}
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            className="size-6"
-          >
-            {open ? (
-              <path d="M18 6 6 18M6 6l12 12" />
-            ) : (
-              <path d="M4 6h16M4 12h16M4 18h16" />
+              )
             )}
-          </svg>
-        </button>
-      </div>
+            <Link
+              href="/iletisim"
+              className="ml-2 rounded-lg bg-orange-600 px-4 py-2 text-sm font-bold text-white transition hover:bg-orange-700"
+            >
+              Teklif Alın
+            </Link>
+          </nav>
 
-      {/* Mobil menü */}
-      {open && (
-        <nav className="border-t border-line bg-white px-4 pb-4 lg:hidden">
-          {navItems.map((item) => (
-            <div key={item.href}>
-              <Link
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className={`block rounded-lg px-3 py-2.5 font-semibold ${
-                  isActive(item.href) ? "text-orange-600" : "text-navy-900"
-                }`}
-              >
-                {item.label}
-              </Link>
-              {item.hasDropdown &&
-                services.map((s) => (
-                  <Link
-                    key={s.slug}
-                    href={`/hizmetlerimiz/${s.slug}`}
-                    onClick={() => setOpen(false)}
-                    className="block rounded-lg py-2 pl-7 pr-3 text-sm text-muted"
-                  >
-                    {s.title}
-                  </Link>
-                ))}
-            </div>
-          ))}
-        </nav>
-      )}
+          {/* Mobil menü butonu */}
+          <button
+            type="button"
+            onClick={() => setOpen(!open)}
+            className="rounded-lg p-2 text-navy-900 lg:hidden"
+            aria-label="Menü"
+            aria-expanded={open}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              className="size-6"
+            >
+              {open ? (
+                <path d="M18 6 6 18M6 6l12 12" />
+              ) : (
+                <path d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+        </div>
+
+        {/* Mobil menü */}
+        {open && (
+          <nav className="rounded-b-2xl border-t border-line bg-white px-4 pb-4 lg:hidden">
+            {navItems.map((item) => (
+              <div key={item.href}>
+                <Link
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className={`block rounded-lg px-3 py-2.5 font-semibold ${
+                    isActive(item.href) ? "text-orange-600" : "text-navy-900"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+                {item.hasDropdown &&
+                  services.map((s) => (
+                    <Link
+                      key={s.slug}
+                      href={`/hizmetlerimiz/${s.slug}`}
+                      onClick={() => setOpen(false)}
+                      className="block rounded-lg py-2 pl-7 pr-3 text-sm text-muted"
+                    >
+                      {s.title}
+                    </Link>
+                  ))}
+              </div>
+            ))}
+          </nav>
+        )}
+      </div>
     </header>
   );
 }
