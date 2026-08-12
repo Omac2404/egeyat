@@ -27,9 +27,11 @@ export function Header() {
   return (
     // Sayfanın üstünde yüzer; hero header'ın altına uzanır
     <header className="fixed inset-x-0 top-0 z-40">
-      {/* Üst bar — dar, alt köşeleri oval */}
-      <div className="mx-auto max-w-6xl rounded-b-2xl bg-navy-900 text-white">
-        <div className="flex items-center justify-between gap-4 px-5 py-1.5 text-xs">
+      {/* Tek parça header kartı — kenarlardan kesik, alt köşeleri oval */}
+      <div className="mx-auto max-w-7xl rounded-b-2xl bg-white shadow-md shadow-navy-950/10">
+        {/* Üst bar — kartın içinde, dar ve alt köşeleri oval */}
+        <div className="mx-auto max-w-6xl rounded-b-2xl bg-navy-900 text-white">
+          <div className="flex items-center justify-between gap-4 px-5 py-1.5 text-xs">
           <div className="flex items-center gap-4">
             <a
               href={site.phoneHref}
@@ -69,8 +71,7 @@ export function Header() {
         </div>
       </div>
 
-      {/* Ana bar — üst bardan geniş, köşeleri oval, kenarlardan kesik */}
-      <div className="mx-auto max-w-7xl rounded-2xl bg-white shadow-md shadow-navy-950/10">
+        {/* Ana bar */}
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-5 py-3">
           <Link href="/" className="shrink-0" onClick={() => setOpen(false)}>
             <Image
