@@ -4,6 +4,7 @@ import { announcements, formatDate } from "@/lib/content/announcements";
 import { site } from "@/lib/site";
 import { Icon } from "@/components/site/Icon";
 import { MediaPlaceholder } from "@/components/site/MediaPlaceholder";
+import { HeroVideo } from "@/components/site/HeroVideo";
 
 export default function HomePage() {
   const latest = announcements.slice(0, 3);
@@ -12,17 +13,8 @@ export default function HomePage() {
     <>
       {/* HERO */}
       <section className="relative overflow-hidden bg-navy-950 text-white">
-        {/* Arka plan videosu */}
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          className="absolute inset-0 size-full object-cover"
-        >
-          <source src="/medya/hero.mp4" type="video/mp4" />
-        </video>
+        {/* Arka plan videosu — sona yaklaşınca kararıp başa sarar */}
+        <HeroVideo />
         {/* Karartma: sol taraf (metin) koyu, sağa doğru açılıyor */}
         <div className="absolute inset-0 bg-gradient-to-r from-navy-950/95 via-navy-950/70 to-navy-950/30" />
         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-navy-950/80 to-transparent" />
@@ -61,22 +53,6 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* İstatistik bandı */}
-        <div className="relative border-t border-navy-800 bg-navy-900/60">
-          <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-4 py-8 text-center sm:grid-cols-4">
-            {[
-              ["20+", "Yıllık Tecrübe"],
-              ["3", "Bayrak Ülkesi"],
-              ["2", "Ofis (İzmir & Çeşme)"],
-              ["5", "Uzmanlık Alanı"],
-            ].map(([num, label]) => (
-              <div key={label}>
-                <p className="text-3xl font-bold text-orange-500">{num}</p>
-                <p className="mt-1 text-sm text-navy-200">{label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
       </section>
 
       {/* HİZMETLER */}
