@@ -16,15 +16,11 @@ export default function HomePage() {
         {/* Arka plan videosu — sona yaklaşınca kararıp başa sarar */}
         <HeroVideo />
         {/* Karartma: sol taraf (metin) koyu, sağa doğru açılıyor */}
-        <div className="absolute inset-0 bg-gradient-to-r from-navy-950/95 via-navy-950/70 to-navy-950/30" />
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-navy-950/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-navy-950/80 via-navy-950/40 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-navy-950/60 to-transparent" />
 
         <div className="relative mx-auto max-w-6xl px-4 py-24 sm:py-32">
           <div className="max-w-2xl">
-            <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-navy-950/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-orange-400 backdrop-blur-sm">
-              <Icon name="anchor" className="size-3.5" />
-              2002&apos;den beri İzmir&apos;de
-            </p>
             <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
               Yat ve Gemi İşlemlerinde{" "}
               <span className="text-orange-500">Güvenilir</span> Çözüm
