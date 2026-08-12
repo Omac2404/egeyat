@@ -17,7 +17,8 @@ export default function HomePage() {
         <HeroVideo />
         {/* Karartma: sol taraf (metin) koyu, sağa doğru açılıyor */}
         <div className="absolute inset-0 bg-gradient-to-r from-navy-950/80 via-navy-950/40 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-navy-950/60 to-transparent" />
+        {/* Alt kenar: videodan hizmetler bölümüne homojen beyaz geçiş */}
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent via-white/40 to-white" />
 
         <div className="relative mx-auto max-w-6xl px-4 py-24 sm:py-32">
           <div className="max-w-2xl">
