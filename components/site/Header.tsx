@@ -28,7 +28,7 @@ export function Header() {
     // Sayfanın üstünde yüzer; hero header'ın altına uzanır
     <header className="fixed inset-x-0 top-0 z-40">
       {/* Tek parça header kartı — kenarlardan kesik, alt köşeleri oval */}
-      <div className="mx-auto max-w-7xl rounded-b-2xl bg-white shadow-md shadow-navy-950/10">
+      <div className="mx-auto max-w-7xl rounded-b-3xl border border-t-0 border-line bg-white shadow-xl shadow-navy-950/15">
         {/* Üst bar — kartın içinde, dar ve alt köşeleri oval */}
         <div className="mx-auto max-w-6xl rounded-b-2xl bg-navy-900 text-white">
           <div className="flex items-center justify-between gap-4 px-5 py-1.5 text-xs">
@@ -171,7 +171,7 @@ export function Header() {
 
         {/* Mobil menü */}
         {open && (
-          <nav className="rounded-b-2xl border-t border-line bg-white px-4 pb-4 lg:hidden">
+          <nav className="rounded-b-3xl border-t border-line bg-white px-4 pb-4 lg:hidden">
             {navItems.map((item) => (
               <div key={item.href}>
                 <Link
