@@ -26,8 +26,8 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 bg-white shadow-sm">
-      {/* Üst bar */}
-      <div className="bg-navy-900 text-white">
+      {/* Üst bar — kenarlardan kesik, alt köşeleri yumuşak oval */}
+      <div className="mx-auto max-w-7xl rounded-b-2xl bg-navy-900 text-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-1.5 text-xs">
           <div className="flex items-center gap-4">
             <a
