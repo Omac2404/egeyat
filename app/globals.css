@@ -28,6 +28,14 @@
   --color-line: #e7e5f0;
 
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+
+  /* Kurum logoları slider'ı */
+  --animate-marquee: marquee 45s linear infinite;
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
 }
 
 body {

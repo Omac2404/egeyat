@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { services } from "@/lib/content/services";
 import { announcements, formatDate } from "@/lib/content/announcements";
-import { site, institutions } from "@/lib/site";
+import { site } from "@/lib/site";
 import { Icon } from "@/components/site/Icon";
 import { MediaPlaceholder } from "@/components/site/MediaPlaceholder";
 
@@ -205,31 +205,6 @@ export default function HomePage() {
             Devamını okuyun
             <Icon name="arrow" className="size-4" />
           </Link>
-        </div>
-      </section>
-
-      {/* KURUMLAR */}
-      <section className="border-y border-line bg-navy-50/40">
-        <div className="mx-auto max-w-6xl px-4 py-14">
-          <p className="mb-8 text-center text-sm font-bold uppercase tracking-wider text-navy-500">
-            İşlem Yaptığımız Kurumlar
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            {institutions.map((k) => (
-              <span
-                key={k}
-                className="flex items-center gap-2 rounded-full border border-line bg-white px-4 py-2 text-sm font-medium text-navy-800"
-              >
-                <span className="flex size-6 items-center justify-center rounded-full bg-navy-100 text-[8px] font-bold text-navy-500">
-                  LOGO
-                </span>
-                {k}
-              </span>
-            ))}
-          </div>
-          <p className="mt-6 text-center text-xs text-muted">
-            Kurum logoları eklenecek.
-          </p>
         </div>
       </section>
 
