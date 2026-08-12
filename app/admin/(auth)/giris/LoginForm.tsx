@@ -15,24 +15,24 @@ export function LoginForm() {
   return (
     <form action={formAction} className="flex flex-col gap-4">
       <input type="hidden" name="next" value={next} />
-      <label className="flex flex-col gap-1 text-sm font-medium text-sea-900">
+      <label className="flex flex-col gap-1 text-sm font-medium text-navy-900">
         E-posta
         <input
           type="email"
           name="email"
           required
           autoComplete="email"
-          className="rounded-lg border border-sand-300 px-3 py-2 text-base outline-none focus:border-sea-500 focus:ring-2 focus:ring-sea-100"
+          className="rounded-lg border border-line px-3 py-2 text-base outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
         />
       </label>
-      <label className="flex flex-col gap-1 text-sm font-medium text-sea-900">
+      <label className="flex flex-col gap-1 text-sm font-medium text-navy-900">
         Şifre
         <input
           type="password"
           name="password"
           required
           autoComplete="current-password"
-          className="rounded-lg border border-sand-300 px-3 py-2 text-base outline-none focus:border-sea-500 focus:ring-2 focus:ring-sea-100"
+          className="rounded-lg border border-line px-3 py-2 text-base outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
         />
       </label>
       {state.error && (
@@ -43,7 +43,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={pending}
-        className="rounded-lg bg-sea-700 px-4 py-2.5 font-semibold text-white transition hover:bg-sea-900 disabled:opacity-60"
+        className="rounded-lg bg-navy-800 px-4 py-2.5 font-semibold text-white transition hover:bg-navy-900 disabled:opacity-60"
       >
         {pending ? "Giriş yapılıyor…" : "Giriş yap"}
       </button>

@@ -9,10 +9,11 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Ege Yatçılık",
+    default: "Ege Yatçılık | Gemi Acenteliği & Müşavirlik",
     template: "%s | Ege Yatçılık",
   },
-  description: "Ege Yatçılık — mavi yolculuk, tekne kiralama ve yat turları.",
+  description:
+    "Ege Yatçılık — 2002'den beri İzmir'de yat bayrak tescili, şirket kuruluşu, acentelik, gümrük ve ticari gemi işlemleri.",
 };
 
 export default function RootLayout({

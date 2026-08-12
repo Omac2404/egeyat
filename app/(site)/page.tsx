@@ -1,15 +1,265 @@
+import Link from "next/link";
+import { services } from "@/lib/content/services";
+import { announcements, formatDate } from "@/lib/content/announcements";
+import { site, institutions } from "@/lib/site";
+import { Icon } from "@/components/site/Icon";
+import { MediaPlaceholder } from "@/components/site/MediaPlaceholder";
+
 export default function HomePage() {
+  const latest = announcements.slice(0, 3);
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-gradient-to-b from-sea-50 to-white px-6 text-center">
-      <p className="text-sm font-medium uppercase tracking-widest text-accent">
-        Yakında
-      </p>
-      <h1 className="text-4xl font-bold tracking-tight text-sea-900 sm:text-6xl">
-        Ege Yatçılık
-      </h1>
-      <p className="max-w-md text-lg text-sea-700">
-        Mavi yolculuk, tekne kiralama ve yat turları. Site hazırlanıyor.
-      </p>
-    </main>
+    <>
+      {/* HERO */}
+      <section className="relative overflow-hidden bg-navy-950 text-white">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-20"
+          style={{
+            background:
+              "radial-gradient(700px 350px at 85% 20%, #f27e00 0%, transparent 60%), radial-gradient(600px 400px at 10% 90%, #3c2b99 0%, transparent 55%)",
+          }}
+        />
+        <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 sm:py-24 lg:grid-cols-2">
+          <div>
+            <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-navy-700 bg-navy-900/60 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-orange-400">
+              <Icon name="anchor" className="size-3.5" />
+              2002&apos;den beri İzmir&apos;de
+            </p>
+            <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+              Yat ve Gemi İşlemlerinde{" "}
+              <span className="text-orange-500">Güvenilir</span> Çözüm
+              Ortağınız
+            </h1>
+            <p className="mt-5 max-w-xl text-lg leading-relaxed text-navy-100">
+              Türk ve yabancı bayraklı yat sahiplerine tek işimiz olan
+              acentelik ve müşavirlik hizmetini 20 yılı aşkın tecrübemizle
+              sunuyoruz. Bayrak tescili, şirket kuruluşu, gümrük ve liman
+              işlemleriniz bizde.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href="/hizmetlerimiz"
+                className="rounded-lg bg-orange-600 px-6 py-3 font-bold text-white transition hover:bg-orange-700"
+              >
+                Hizmetlerimiz
+              </Link>
+              <Link
+                href="/iletisim"
+                className="rounded-lg border border-navy-400 px-6 py-3 font-bold text-white transition hover:border-orange-500 hover:text-orange-400"
+              >
+                Bize Ulaşın
+              </Link>
+            </div>
+          </div>
+          <MediaPlaceholder
+            kind="video"
+            label="Tanıtım videosu / marina görseli gelecek"
+            className="aspect-video border-navy-700 bg-navy-900/50 text-navy-300"
+          />
+        </div>
+
+        {/* İstatistik bandı */}
+        <div className="relative border-t border-navy-800 bg-navy-900/60">
+          <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-4 py-8 text-center sm:grid-cols-4">
+            {[
+              ["20+", "Yıllık Tecrübe"],
+              ["3", "Bayrak Ülkesi"],
+              ["2", "Ofis (İzmir & Çeşme)"],
+              ["5", "Uzmanlık Alanı"],
+            ].map(([num, label]) => (
+              <div key={label}>
+                <p className="text-3xl font-bold text-orange-500">{num}</p>
+                <p className="mt-1 text-sm text-navy-200">{label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* HİZMETLER */}
+      <section className="mx-auto max-w-6xl px-4 py-20">
+        <div className="mb-10 max-w-2xl">
+          <p className="text-sm font-bold uppercase tracking-wider text-orange-600">
+            Hizmetlerimiz
+          </p>
+          <h2 className="mt-2 text-3xl font-bold tracking-tight text-navy-900">
+            Denizde ve masada, tüm işlemleriniz tek elden
+          </h2>
+        </div>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {services.map((s) => (
+            <Link
+              key={s.slug}
+              href={`/hizmetlerimiz/${s.slug}`}
+              className="group rounded-2xl border border-line bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-orange-200 hover:shadow-md"
+            >
+              <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-navy-50 text-navy-700 transition group-hover:bg-orange-50 group-hover:text-orange-600">
+                <Icon name={s.icon} className="size-6" />
+              </div>
+              <h3 className="font-bold text-navy-900 group-hover:text-orange-700">
+                {s.title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted">
+                {s.summary}
+              </p>
+              <p className="mt-4 flex items-center gap-1.5 text-sm font-semibold text-orange-600">
+                Detaylı bilgi
+                <Icon
+                  name="arrow"
+                  className="size-4 transition group-hover:translate-x-1"
+                />
+              </p>
+            </Link>
+          ))}
+          <div className="flex flex-col justify-center rounded-2xl bg-navy-900 p-6 text-white">
+            <h3 className="text-xl font-bold">
+              Hangi işleme ihtiyacınız olduğundan emin değil misiniz?
+            </h3>
+            <p className="mt-2 text-sm text-navy-100">
+              Durumunuzu anlatın, doğru süreci birlikte belirleyelim.
+            </p>
+            <a
+              href={`https://wa.me/${site.whatsapp}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex w-fit items-center gap-2 rounded-lg bg-orange-600 px-5 py-2.5 font-bold transition hover:bg-orange-700"
+            >
+              <Icon name="whatsapp" className="size-5" />
+              WhatsApp&apos;tan Yazın
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* DUYURULAR */}
+      <section className="bg-navy-50/50">
+        <div className="mx-auto max-w-6xl px-4 py-20">
+          <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="text-sm font-bold uppercase tracking-wider text-orange-600">
+                Duyurular
+              </p>
+              <h2 className="mt-2 text-3xl font-bold tracking-tight text-navy-900">
+                Güncel haberler ve harç duyuruları
+              </h2>
+            </div>
+            <Link
+              href="/duyurular"
+              className="flex items-center gap-1.5 font-semibold text-navy-700 hover:text-orange-600"
+            >
+              Tüm duyurular
+              <Icon name="arrow" className="size-4" />
+            </Link>
+          </div>
+          <div className="grid gap-5 md:grid-cols-3">
+            {latest.map((a) => (
+              <Link
+                key={a.slug}
+                href={`/duyurular/${a.slug}`}
+                className="group rounded-2xl border border-line bg-white p-6 shadow-sm transition hover:border-orange-200 hover:shadow-md"
+              >
+                <p className="text-xs font-semibold uppercase tracking-wider text-orange-600">
+                  {formatDate(a.date)}
+                </p>
+                <h3 className="mt-2 font-bold leading-snug text-navy-900 group-hover:text-orange-700">
+                  {a.title}
+                </h3>
+                <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted">
+                  {a.summary}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* HAKKIMIZDA ÖZETİ */}
+      <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-20 lg:grid-cols-2">
+        <MediaPlaceholder
+          kind="image"
+          label="Ofis / marina / ekip görseli gelecek"
+          className="aspect-4/3"
+        />
+        <div>
+          <p className="text-sm font-bold uppercase tracking-wider text-orange-600">
+            Hakkımızda
+          </p>
+          <h2 className="mt-2 text-3xl font-bold tracking-tight text-navy-900">
+            Tek işimiz acentelik ve müşavirlik
+          </h2>
+          <p className="mt-4 leading-relaxed text-muted">
+            Şirketimiz 2002 yılında kurulmuş olup merkezi Konak, İzmir&apos;de;
+            irtibat ofisi Çeşme&apos;dedir. 20 yılı aşkın süredir Türk ve
+            yabancı bayraklı yat sahiplerine tek işimiz olan acentelik ve
+            danışmanlık hizmeti veriyoruz.
+          </p>
+          <p className="mt-3 leading-relaxed text-muted">
+            En iyi ve sürekli hizmet anlayışıyla müşterilerimize ve denizcilik
+            sektörüne katkı sağlıyoruz; mevzuatı sürekli takip ederek
+            işlemlerinizi gecikmesiz sonuçlandırıyoruz.
+          </p>
+          <Link
+            href="/hakkimizda"
+            className="mt-6 inline-flex items-center gap-1.5 font-bold text-orange-600 hover:text-orange-700"
+          >
+            Devamını okuyun
+            <Icon name="arrow" className="size-4" />
+          </Link>
+        </div>
+      </section>
+
+      {/* KURUMLAR */}
+      <section className="border-y border-line bg-navy-50/40">
+        <div className="mx-auto max-w-6xl px-4 py-14">
+          <p className="mb-8 text-center text-sm font-bold uppercase tracking-wider text-navy-500">
+            İşlem Yaptığımız Kurumlar
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            {institutions.map((k) => (
+              <span
+                key={k}
+                className="flex items-center gap-2 rounded-full border border-line bg-white px-4 py-2 text-sm font-medium text-navy-800"
+              >
+                <span className="flex size-6 items-center justify-center rounded-full bg-navy-100 text-[8px] font-bold text-navy-500">
+                  LOGO
+                </span>
+                {k}
+              </span>
+            ))}
+          </div>
+          <p className="mt-6 text-center text-xs text-muted">
+            Kurum logoları eklenecek.
+          </p>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="bg-navy-950">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 py-16 text-center">
+          <h2 className="max-w-2xl text-3xl font-bold tracking-tight text-white">
+            İşlemlerinizi bize bırakın, siz denizin keyfini çıkarın
+          </h2>
+          <p className="max-w-xl text-navy-100">
+            Bayrak tescili, transitlog, gümrük veya şirket kuruluşu — hangi
+            konuda olursa olsun, ilk görüşme için bize ulaşın.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <Link
+              href="/iletisim"
+              className="rounded-lg bg-orange-600 px-6 py-3 font-bold text-white transition hover:bg-orange-700"
+            >
+              İletişim Formu
+            </Link>
+            <a
+              href={site.phoneHref}
+              className="flex items-center gap-2 rounded-lg border border-navy-500 px-6 py-3 font-bold text-white transition hover:border-orange-500 hover:text-orange-400"
+            >
+              <Icon name="phone" className="size-4" />
+              {site.phone}
+            </a>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

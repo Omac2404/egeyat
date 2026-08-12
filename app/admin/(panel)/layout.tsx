@@ -8,34 +8,34 @@ export default async function AdminLayout({
   const user = await requireUser();
 
   return (
-    <div className="flex min-h-screen bg-sand-50">
-      <aside className="flex w-60 shrink-0 flex-col border-r border-sand-300 bg-white">
-        <div className="border-b border-sand-300 px-5 py-4">
-          <p className="font-bold text-sea-900">Ege Yatçılık</p>
-          <p className="text-xs text-sea-700">Yönetim Paneli</p>
+    <div className="flex min-h-screen bg-navy-50/50">
+      <aside className="flex w-60 shrink-0 flex-col border-r border-line bg-white">
+        <div className="border-b border-line px-5 py-4">
+          <p className="font-bold text-navy-900">Ege Yatçılık</p>
+          <p className="text-xs text-muted">Yönetim Paneli</p>
         </div>
         <nav className="flex flex-1 flex-col gap-1 p-3 text-sm">
           <Link
             href="/admin"
-            className="rounded-lg px-3 py-2 font-medium text-sea-900 hover:bg-sea-50"
+            className="rounded-lg px-3 py-2 font-medium text-navy-900 hover:bg-navy-50"
           >
             Genel Bakış
           </Link>
           <Link
-            href="/admin/tekneler"
-            className="rounded-lg px-3 py-2 font-medium text-sea-900 hover:bg-sea-50"
+            href="/admin/duyurular"
+            className="rounded-lg px-3 py-2 font-medium text-navy-900 hover:bg-navy-50"
           >
-            Tekneler
+            Duyurular
           </Link>
           <Link
             href="/admin/mesajlar"
-            className="rounded-lg px-3 py-2 font-medium text-sea-900 hover:bg-sea-50"
+            className="rounded-lg px-3 py-2 font-medium text-navy-900 hover:bg-navy-50"
           >
             Mesajlar
           </Link>
         </nav>
-        <div className="border-t border-sand-300 p-3 text-sm">
-          <p className="truncate px-3 pb-2 text-xs text-sea-700">
+        <div className="border-t border-line p-3 text-sm">
+          <p className="truncate px-3 pb-2 text-xs text-muted">
             {user.name} ({user.role})
           </p>
           <form action={logout}>
