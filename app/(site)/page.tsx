@@ -64,9 +64,9 @@ export default function HomePage() {
             <Link
               key={s.slug}
               href={`/hizmetlerimiz/${s.slug}`}
-              className="group rounded-2xl border border-line bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-orange-200 hover:shadow-md"
+              className="group rounded-2xl border border-navy-900 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-orange-600 hover:shadow-md"
             >
-              <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-navy-50 text-navy-700 transition group-hover:bg-orange-50 group-hover:text-orange-600">
+              <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-navy-900 text-white transition group-hover:bg-orange-600">
                 <Icon name={s.icon} className="size-6" />
               </div>
               <h3 className="font-bold text-navy-900 group-hover:text-orange-700">
