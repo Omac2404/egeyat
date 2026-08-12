@@ -18,9 +18,9 @@ export default function HomePage() {
         {/* Karartma: sol taraf (metin) koyu, sağa doğru açılıyor */}
         <div className="absolute inset-0 bg-gradient-to-r from-navy-950/80 via-navy-950/40 to-transparent" />
         {/* Alt kenar: videodan hizmetler bölümüne homojen beyaz geçiş */}
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent via-white/40 to-white" />
+        <div className="absolute inset-x-0 bottom-0 h-72 bg-gradient-to-b from-transparent via-white/30 via-40% to-white" />
 
-        <div className="relative mx-auto flex min-h-[75vh] max-w-6xl items-center px-4 py-28 sm:py-40">
+        <div className="relative mx-auto flex min-h-[88vh] max-w-6xl items-center px-4 py-32 sm:py-44">
           <div className="max-w-2xl">
             <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
               Yat ve Gemi İşlemlerinde{" "}
@@ -55,10 +55,7 @@ export default function HomePage() {
       {/* HİZMETLER */}
       <section className="mx-auto max-w-6xl px-4 py-20">
         <div className="mb-10 max-w-2xl">
-          <p className="text-sm font-bold uppercase tracking-wider text-orange-600">
-            Hizmetlerimiz
-          </p>
-          <h2 className="mt-2 text-3xl font-bold tracking-tight text-navy-900">
+          <h2 className="text-3xl font-bold tracking-tight text-navy-900">
             Denizde ve masada, tüm işlemleriniz tek elden
           </h2>
         </div>
