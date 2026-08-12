@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@theme {
+  /* Marka renkleri — tasarım direktifleriyle netleşecek, şimdilik Ege teması:
+     derin deniz mavisi + kum/bej + turkuaz vurgu */
+  --color-sea-50: #eef7f9;
+  --color-sea-100: #d7ecf1;
+  --color-sea-500: #1a7a96;
+  --color-sea-700: #0f5468;
+  --color-sea-900: #0a3342;
+  --color-sand-50: #faf7f2;
+  --color-sand-100: #f2ebdf;
+  --color-sand-300: #ddcfb6;
+  --color-accent: #16b8c9;
+
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  @apply bg-white text-sea-900 antialiased;
+}
