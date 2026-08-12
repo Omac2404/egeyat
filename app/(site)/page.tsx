@@ -12,16 +12,24 @@ export default function HomePage() {
     <>
       {/* HERO */}
       <section className="relative overflow-hidden bg-navy-950 text-white">
-        <div
-          className="pointer-events-none absolute inset-0 opacity-20"
-          style={{
-            background:
-              "radial-gradient(700px 350px at 85% 20%, #f27e00 0%, transparent 60%), radial-gradient(600px 400px at 10% 90%, #3c2b99 0%, transparent 55%)",
-          }}
-        />
-        <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 sm:py-24 lg:grid-cols-2">
-          <div>
-            <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-navy-700 bg-navy-900/60 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-orange-400">
+        {/* Arka plan videosu */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="absolute inset-0 size-full object-cover"
+        >
+          <source src="/medya/hero.mp4" type="video/mp4" />
+        </video>
+        {/* Karartma: sol taraf (metin) koyu, sağa doğru açılıyor */}
+        <div className="absolute inset-0 bg-gradient-to-r from-navy-950/95 via-navy-950/70 to-navy-950/30" />
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-navy-950/80 to-transparent" />
+
+        <div className="relative mx-auto max-w-6xl px-4 py-24 sm:py-32">
+          <div className="max-w-2xl">
+            <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-navy-950/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-orange-400 backdrop-blur-sm">
               <Icon name="anchor" className="size-3.5" />
               2002&apos;den beri İzmir&apos;de
             </p>
@@ -45,17 +53,12 @@ export default function HomePage() {
               </Link>
               <Link
                 href="/iletisim"
-                className="rounded-lg border border-navy-400 px-6 py-3 font-bold text-white transition hover:border-orange-500 hover:text-orange-400"
+                className="rounded-lg border border-white/30 px-6 py-3 font-bold text-white backdrop-blur-sm transition hover:border-orange-500 hover:text-orange-400"
               >
                 Bize Ulaşın
               </Link>
             </div>
           </div>
-          <MediaPlaceholder
-            kind="video"
-            label="Tanıtım videosu / marina görseli gelecek"
-            className="aspect-video border-navy-700 bg-navy-900/50 text-navy-300"
-          />
         </div>
 
         {/* İstatistik bandı */}
