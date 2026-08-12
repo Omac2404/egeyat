@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/site/PageHero";
-import { MediaPlaceholder } from "@/components/site/MediaPlaceholder";
 
 export const metadata: Metadata = {
   title: "Hakkımızda",
   description:
     "Ege Yatçılık Gemi Acenteliği Müşavirlik — 2002'den beri İzmir merkezli acentelik ve danışmanlık hizmeti.",
 };
+
+// Referans logoları statik gelecek — dosyalar iletilince bu liste
+// { name, src } şeklinde güncellenecek.
+const referenceCount = 18;
 
 export default function AboutPage() {
   return (
@@ -17,8 +20,8 @@ export default function AboutPage() {
         crumbs={[{ label: "Hakkımızda" }]}
       />
 
-      <section className="mx-auto grid max-w-6xl items-start gap-10 px-4 py-16 lg:grid-cols-5">
-        <div className="lg:col-span-3">
+      <section className="mx-auto max-w-6xl px-4 py-16">
+        <div className="max-w-3xl">
           <h2 className="text-2xl font-bold text-navy-900">
             Ege Yatçılık Gemi Acenteliği Müşavirlik Tur. Tic. Ltd. Şti.
           </h2>
@@ -37,40 +40,47 @@ export default function AboutPage() {
               ulaşabilirsiniz.
             </p>
           </div>
+        </div>
 
-          <div className="mt-10 grid gap-5 sm:grid-cols-2">
-            <div className="rounded-2xl border border-line bg-navy-50/50 p-6">
-              <p className="text-sm font-bold uppercase tracking-wider text-orange-600">
-                Misyonumuz
-              </p>
-              <p className="mt-3 leading-relaxed text-navy-900">
-                Türkiye&apos;nin en değerli ve en büyük gemi acenteliği
-                müşavirlik şirketi olmak.
-              </p>
-            </div>
-            <div className="rounded-2xl border border-line bg-navy-50/50 p-6">
-              <p className="text-sm font-bold uppercase tracking-wider text-orange-600">
-                Vizyonumuz
-              </p>
-              <p className="mt-3 leading-relaxed text-navy-900">
-                Sektördeki müşterilerine fayda sağlayan, yenilikçi ve mevzuatı
-                sürekli takip eden gemi acenteliği müşavirlik hizmeti sunmak.
-              </p>
-            </div>
+        <div className="mt-10 grid gap-5 sm:grid-cols-2">
+          <div className="rounded-2xl border border-line bg-navy-50/50 p-6">
+            <p className="text-sm font-bold uppercase tracking-wider text-orange-600">
+              Misyonumuz
+            </p>
+            <p className="mt-3 leading-relaxed text-navy-900">
+              Türkiye&apos;nin en değerli ve en büyük gemi acenteliği
+              müşavirlik şirketi olmak.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-line bg-navy-50/50 p-6">
+            <p className="text-sm font-bold uppercase tracking-wider text-orange-600">
+              Vizyonumuz
+            </p>
+            <p className="mt-3 leading-relaxed text-navy-900">
+              Sektördeki müşterilerine fayda sağlayan, yenilikçi ve mevzuatı
+              sürekli takip eden gemi acenteliği müşavirlik hizmeti sunmak.
+            </p>
           </div>
         </div>
 
-        <div className="space-y-5 lg:col-span-2">
-          <MediaPlaceholder
-            kind="image"
-            label="Ofis / ekip görseli gelecek"
-            className="aspect-4/3"
-          />
-          <MediaPlaceholder
-            kind="image"
-            label="Marina / saha görseli gelecek"
-            className="aspect-4/3"
-          />
+        {/* Referanslar */}
+        <div className="mt-16">
+          <h2 className="text-2xl font-bold text-navy-900">Referanslarımız</h2>
+          <p className="mt-2 text-sm text-muted">
+            Logolar statik olarak eklenecek.
+          </p>
+          <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            {Array.from({ length: referenceCount }, (_, i) => (
+              <div
+                key={i}
+                className="flex aspect-[3/2] items-center justify-center rounded-xl border border-line bg-white shadow-sm"
+              >
+                <span className="text-xs font-bold uppercase tracking-wider text-navy-200">
+                  Logo {i + 1}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </>
