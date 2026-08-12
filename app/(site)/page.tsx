@@ -20,7 +20,7 @@ export default function HomePage() {
         {/* Alt kenar: videodan hizmetler bölümüne homojen beyaz geçiş */}
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent via-white/40 to-white" />
 
-        <div className="relative mx-auto max-w-6xl px-4 py-24 sm:py-32">
+        <div className="relative mx-auto flex min-h-[75vh] max-w-6xl items-center px-4 py-28 sm:py-40">
           <div className="max-w-2xl">
             <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
               Yat ve Gemi İşlemlerinde{" "}
