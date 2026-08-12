@@ -6,7 +6,7 @@ import { Icon } from "./Icon";
 
 export function Footer() {
   return (
-    <footer className="bg-navy-950 text-navy-100">
+    <footer className="rounded-t-[2rem] bg-navy-950 text-navy-100 sm:rounded-t-[2.5rem]">
       {/* CTA şeridi */}
       <div className="border-b border-navy-800/80">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-5 px-4 py-10 text-center sm:flex-row sm:text-left">

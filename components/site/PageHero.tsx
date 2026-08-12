@@ -10,7 +10,7 @@ export function PageHero({
   crumbs: { href?: string; label: string }[];
 }) {
   return (
-    <section className="rounded-b-[3rem] bg-navy-900 text-white sm:rounded-b-[4rem]">
+    <section className="rounded-b-[2rem] bg-navy-900 text-white sm:rounded-b-[2.5rem]">
       {/* Üstteki boşluk: yüzen header'ın altında kalan alan */}
       <div className="mx-auto max-w-6xl px-4 pb-14 pt-40">
         <nav className="mb-3 flex flex-wrap items-center gap-1.5 text-xs text-navy-200">
