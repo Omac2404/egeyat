@@ -25,7 +25,7 @@ export function Header() {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <header className="sticky top-0 z-40 rounded-b-2xl bg-white shadow-md shadow-navy-950/5">
+    <header className="sticky top-0 z-40 bg-white shadow-sm">
       {/* Üst bar */}
       <div className="bg-navy-900 text-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-1.5 text-xs">
@@ -168,7 +168,7 @@ export function Header() {
 
       {/* Mobil menü */}
       {open && (
-        <nav className="rounded-b-2xl border-t border-line bg-white px-4 pb-4 lg:hidden">
+        <nav className="border-t border-line bg-white px-4 pb-4 lg:hidden">
           {navItems.map((item) => (
             <div key={item.href}>
               <Link
