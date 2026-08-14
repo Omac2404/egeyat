@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { site } from "@/lib/site";
+import { getContactSettings } from "@/lib/data/contact";
+import { lineHref } from "@/lib/contact-settings";
 import { PageHero } from "@/components/site/PageHero";
 import { Icon } from "@/components/site/Icon";
 import { ContactForm } from "./ContactForm";
@@ -10,18 +11,20 @@ export const metadata: Metadata = {
     "Ege Yatçılık İzmir merkez ve Çeşme irtibat ofisi iletişim bilgileri.",
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const settings = await getContactSettings();
+
   return (
     <>
       <PageHero
         title="İletişim"
-        subtitle="Sorularınız için bize ulaşın — aynı gün dönüş yapıyoruz."
+        subtitle={settings.subtitle}
         crumbs={[{ label: "İletişim" }]}
       />
 
       <section className="mx-auto grid max-w-6xl items-start gap-10 px-4 py-16 lg:grid-cols-5">
         <div className="space-y-5 lg:col-span-2">
-          {site.offices.map((office) => (
+          {settings.offices.map((office) => (
             <div
               key={office.name}
               className="rounded-2xl border border-line bg-white p-6 shadow-sm"
@@ -35,31 +38,34 @@ export default function ContactPage() {
                 {office.address}
               </p>
               <ul className="mt-4 space-y-2 text-sm">
-                {office.lines.map((line, i) => (
-                  <li key={i} className="flex gap-2">
-                    <span className="w-14 shrink-0 font-semibold text-navy-500">
-                      {line.label}
-                    </span>
-                    {"href" in line && line.href ? (
-                      <a
-                        href={line.href}
-                        className="font-medium text-navy-900 hover:text-orange-600"
-                      >
-                        {line.value}
-                      </a>
-                    ) : (
-                      <span className="font-medium text-navy-900">
-                        {line.value}
+                {office.lines.map((line, i) => {
+                  const href = lineHref(line);
+                  return (
+                    <li key={i} className="flex gap-2">
+                      <span className="w-14 shrink-0 font-semibold text-navy-500">
+                        {line.label}
                       </span>
-                    )}
-                  </li>
-                ))}
+                      {href ? (
+                        <a
+                          href={href}
+                          className="font-medium text-navy-900 hover:text-orange-600"
+                        >
+                          {line.value}
+                        </a>
+                      ) : (
+                        <span className="font-medium text-navy-900">
+                          {line.value}
+                        </span>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}
 
           <a
-            href={`https://wa.me/${site.whatsapp}`}
+            href={`https://wa.me/${settings.whatsapp}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 rounded-2xl bg-[#25d366] px-6 py-4 font-bold text-white transition hover:bg-[#1faf53]"
@@ -86,8 +92,8 @@ export default function ContactPage() {
       <section className="mx-auto max-w-6xl px-4 pb-16">
         <div className="overflow-hidden rounded-2xl border border-line">
           <iframe
-            title="Ege Yatçılık — İzmir Merkez Ofis Haritası"
-            src="https://maps.google.com/maps?q=%C4%B0hsan%20Kay%C4%B1n%20Plaza%20Konak%20%C4%B0zmir&z=16&output=embed"
+            title="Ege Yatçılık İzmir Merkez Ofis Haritası"
+            src={settings.mapEmbedUrl}
             className="h-96 w-full border-0"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
@@ -95,7 +101,7 @@ export default function ContactPage() {
         </div>
         <p className="mt-3 text-right text-sm">
           <a
-            href={site.mapsUrl}
+            href={settings.mapsUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="font-semibold text-navy-700 hover:text-orange-600"

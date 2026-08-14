@@ -1,14 +1,26 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { services, getService } from "@/lib/content/services";
+import { and, eq } from "drizzle-orm";
+import { db } from "@/db";
+import { services as servicesTable } from "@/db/schema";
+import { getPublishedServices } from "@/lib/data/services";
 import { PageHero } from "@/components/site/PageHero";
 import { MediaPlaceholder } from "@/components/site/MediaPlaceholder";
 import { Icon } from "@/components/site/Icon";
 import { site } from "@/lib/site";
 
-export function generateStaticParams() {
-  return services.map((s) => ({ slug: s.slug }));
+export const dynamic = "force-dynamic";
+
+async function getService(slug: string) {
+  const rows = await db
+    .select()
+    .from(servicesTable)
+    .where(
+      and(eq(servicesTable.slug, slug), eq(servicesTable.published, true))
+    )
+    .limit(1);
+  return rows[0];
 }
 
 export async function generateMetadata({
@@ -16,7 +28,7 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const service = getService((await params).slug);
+  const service = await getService((await params).slug);
   if (!service) return {};
   return { title: service.title, description: service.summary };
 }
@@ -26,8 +38,9 @@ export default async function ServiceDetailPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const service = getService((await params).slug);
+  const service = await getService((await params).slug);
   if (!service) notFound();
+  const services = await getPublishedServices();
 
   return (
     <>
@@ -47,9 +60,16 @@ export default async function ServiceDetailPage({
           <div className="mt-8 space-y-8">
             {service.sections.map((sec) => (
               <div key={sec.title}>
-                <h2 className="mb-4 text-xl font-bold text-navy-900">
-                  {sec.title}
-                </h2>
+                {sec.title && (
+                  <h2 className="mb-4 text-xl font-bold text-navy-900">
+                    {sec.title}
+                  </h2>
+                )}
+                {sec.description && (
+                  <p className="mb-4 leading-relaxed text-muted">
+                    {sec.description}
+                  </p>
+                )}
                 <ul className="grid gap-2.5 sm:grid-cols-2">
                   {sec.items.map((item) => (
                     <li
@@ -77,15 +97,24 @@ export default async function ServiceDetailPage({
         </div>
 
         <aside className="space-y-5">
-          <MediaPlaceholder
-            kind="image"
-            label="Hizmet görseli gelecek"
-            className="aspect-4/3"
-          />
+          {service.image ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={service.image}
+              alt={service.title}
+              className="aspect-[4/3] w-full rounded-2xl border border-line object-cover shadow-sm"
+            />
+          ) : (
+            <MediaPlaceholder
+              kind="image"
+              label="Hizmet görseli gelecek"
+              className="aspect-4/3"
+            />
+          )}
           <div className="rounded-2xl bg-navy-900 p-6 text-white">
-            <h3 className="font-bold">Bu hizmet için teklif alın</h3>
+            <h3 className="font-bold">Merak ettikleriniz için bize ulaşın</h3>
             <p className="mt-2 text-sm text-navy-100">
-              İşleminizin detaylarını iletin, aynı gün dönüş yapalım.
+              İşleminizin detaylarını iletin, en kısa sürede dönüş sağlayalım.
             </p>
             <div className="mt-5 flex flex-col gap-2.5">
               <a

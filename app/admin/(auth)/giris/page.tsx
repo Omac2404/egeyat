@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import { LoginForm } from "./LoginForm";
 
 export const metadata: Metadata = {
@@ -11,8 +12,20 @@ export default function LoginPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-navy-950 px-4">
       <div className="w-full max-w-sm rounded-2xl bg-white p-8 shadow-xl">
-        <h1 className="mb-1 text-xl font-bold text-navy-900">Ege Yatçılık</h1>
-        <p className="mb-6 text-sm text-muted">Yönetim paneli girişi</p>
+        <div className="mb-6 text-center">
+          <Image
+            src="/logo.png"
+            alt="Ege Yatçılık"
+            width={220}
+            height={58}
+            priority
+            className="mx-auto h-12 w-auto"
+          />
+          <h1 className="mt-4 text-xl font-bold text-navy-900">
+            Ege Yatçılık
+          </h1>
+          <p className="mt-1 text-sm text-muted">Yönetim paneli girişi</p>
+        </div>
         <Suspense>
           <LoginForm />
         </Suspense>

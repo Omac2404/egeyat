@@ -1,13 +1,63 @@
 import Link from "next/link";
-import { services } from "@/lib/content/services";
-import { announcements, formatDate } from "@/lib/content/announcements";
-import { site } from "@/lib/site";
+import { desc, eq } from "drizzle-orm";
+import { db } from "@/db";
+import { announcements } from "@/db/schema";
+import { getPublishedServices } from "@/lib/data/services";
+import { getGeneralSettings } from "@/lib/data/general";
+import { formatDate } from "@/lib/content/announcements";
 import { Icon } from "@/components/site/Icon";
 import { MediaPlaceholder } from "@/components/site/MediaPlaceholder";
 import { HeroVideo } from "@/components/site/HeroVideo";
+import { FlagSlider } from "@/components/site/FlagSlider";
 
-export default function HomePage() {
-  const latest = announcements.slice(0, 3);
+export const dynamic = "force-dynamic";
+
+// Ayarlardaki vurgu kelimesini turuncu renkle işaretleyerek başlığı böler
+function renderHighlighted(title: string, highlight: string) {
+  const idx = highlight ? title.indexOf(highlight) : -1;
+  if (idx === -1) return title;
+  return (
+    <>
+      {title.slice(0, idx)}
+      <span className="text-orange-500">{highlight}</span>
+      {title.slice(idx + highlight.length)}
+    </>
+  );
+}
+
+// Site içi yollar Link, dış adresler (https/tel/mailto) düz bağlantı olur
+function SmartLink({
+  href,
+  className,
+  children,
+}: {
+  href: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  if (href.startsWith("/")) {
+    return (
+      <Link href={href} className={className}>
+        {children}
+      </Link>
+    );
+  }
+  return (
+    <a href={href} className={className}>
+      {children}
+    </a>
+  );
+}
+
+export default async function HomePage() {
+  const general = await getGeneralSettings();
+  const services = await getPublishedServices();
+  const latest = await db
+    .select()
+    .from(announcements)
+    .where(eq(announcements.published, true))
+    .orderBy(desc(announcements.date), desc(announcements.id))
+    .limit(3);
 
   return (
     <>
@@ -23,34 +73,32 @@ export default function HomePage() {
         <div className="relative mx-auto flex min-h-[88vh] max-w-6xl items-center px-4 py-32 sm:py-44">
           <div className="max-w-2xl">
             <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
-              Yat ve Gemi İşlemlerinde{" "}
-              <span className="text-orange-500">Güvenilir</span> Çözüm
-              Ortağınız
+              {renderHighlighted(general.hero.title, general.hero.highlight)}
             </h1>
             <p className="mt-5 max-w-xl text-lg leading-relaxed text-navy-100">
-              Türk ve yabancı bayraklı yat sahiplerine tek işimiz olan
-              acentelik ve müşavirlik hizmetini 20 yılı aşkın tecrübemizle
-              sunuyoruz. Bayrak tescili, şirket kuruluşu, gümrük ve liman
-              işlemleriniz bizde.
+              {general.hero.text}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                href="/hizmetlerimiz"
+              <SmartLink
+                href={general.hero.primary.href}
                 className="rounded-lg bg-orange-600 px-6 py-3 font-bold text-white transition hover:bg-orange-700"
               >
-                Hizmetlerimiz
-              </Link>
-              <Link
-                href="/iletisim"
+                {general.hero.primary.label}
+              </SmartLink>
+              <SmartLink
+                href={general.hero.secondary.href}
                 className="rounded-lg border border-white/30 px-6 py-3 font-bold text-white backdrop-blur-sm transition hover:border-orange-500 hover:text-orange-400"
               >
-                Bize Ulaşın
-              </Link>
+                {general.hero.secondary.label}
+              </SmartLink>
             </div>
           </div>
         </div>
 
       </section>
+
+      {/* HİZMET VERİLEN BAYRAKLAR */}
+      <FlagSlider flags={general.flags} />
 
       {/* HİZMETLER */}
       <section className="mx-auto max-w-6xl px-4 py-20">
@@ -64,18 +112,18 @@ export default function HomePage() {
             <Link
               key={s.slug}
               href={`/hizmetlerimiz/${s.slug}`}
-              className="group rounded-2xl border border-navy-900 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-orange-600 hover:shadow-md"
+              className="group rounded-2xl bg-navy-900 p-6 shadow-sm transition hover:-translate-y-0.5 hover:bg-navy-800 hover:shadow-md"
             >
-              <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-navy-900 text-white transition group-hover:bg-orange-600">
+              <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-white/10 text-white transition group-hover:bg-orange-600">
                 <Icon name={s.icon} className="size-6" />
               </div>
-              <h3 className="font-bold text-navy-900 group-hover:text-orange-700">
+              <h3 className="text-lg font-bold text-white group-hover:text-orange-400">
                 {s.title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">
+              <p className="mt-2 text-sm leading-relaxed text-navy-100">
                 {s.summary}
               </p>
-              <p className="mt-4 flex items-center gap-1.5 text-sm font-semibold text-orange-600">
+              <p className="mt-4 flex items-center gap-1.5 text-sm font-semibold text-orange-400">
                 Detaylı bilgi
                 <Icon
                   name="arrow"
@@ -84,23 +132,6 @@ export default function HomePage() {
               </p>
             </Link>
           ))}
-          <div className="flex flex-col justify-center rounded-2xl bg-navy-900 p-6 text-white">
-            <h3 className="text-xl font-bold">
-              Hangi işleme ihtiyacınız olduğundan emin değil misiniz?
-            </h3>
-            <p className="mt-2 text-sm text-navy-100">
-              Durumunuzu anlatın, doğru süreci birlikte belirleyelim.
-            </p>
-            <a
-              href={`https://wa.me/${site.whatsapp}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-5 inline-flex w-fit items-center gap-2 rounded-lg bg-orange-600 px-5 py-2.5 font-bold transition hover:bg-orange-700"
-            >
-              <Icon name="whatsapp" className="size-5" />
-              WhatsApp&apos;tan Yazın
-            </a>
-          </div>
         </div>
       </section>
 
@@ -148,29 +179,35 @@ export default function HomePage() {
 
       {/* HAKKIMIZDA ÖZETİ */}
       <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-20 lg:grid-cols-2">
-        <MediaPlaceholder
-          kind="image"
-          label="Ofis / marina / ekip görseli gelecek"
-          className="aspect-4/3"
-        />
+        {general.about.image ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={general.about.image}
+            alt={general.about.title}
+            className="aspect-[4/3] w-full rounded-2xl border border-line object-cover shadow-sm"
+          />
+        ) : (
+          <MediaPlaceholder
+            kind="image"
+            label="Ofis / marina / ekip görseli gelecek"
+            className="aspect-4/3"
+          />
+        )}
         <div>
           <p className="text-sm font-bold uppercase tracking-wider text-orange-600">
             Hakkımızda
           </p>
           <h2 className="mt-2 text-3xl font-bold tracking-tight text-navy-900">
-            Tek işimiz acentelik ve müşavirlik
+            {general.about.title}
           </h2>
           <p className="mt-4 leading-relaxed text-muted">
-            Şirketimiz 2002 yılında kurulmuş olup merkezi Konak, İzmir&apos;de;
-            irtibat ofisi Çeşme&apos;dedir. 20 yılı aşkın süredir Türk ve
-            yabancı bayraklı yat sahiplerine tek işimiz olan acentelik ve
-            danışmanlık hizmeti veriyoruz.
+            {general.about.text1}
           </p>
-          <p className="mt-3 leading-relaxed text-muted">
-            En iyi ve sürekli hizmet anlayışıyla müşterilerimize ve denizcilik
-            sektörüne katkı sağlıyoruz; mevzuatı sürekli takip ederek
-            işlemlerinizi gecikmesiz sonuçlandırıyoruz.
-          </p>
+          {general.about.text2 && (
+            <p className="mt-3 leading-relaxed text-muted">
+              {general.about.text2}
+            </p>
+          )}
           <Link
             href="/hakkimizda"
             className="mt-6 inline-flex items-center gap-1.5 font-bold text-orange-600 hover:text-orange-700"
@@ -184,27 +221,26 @@ export default function HomePage() {
       {/* CTA */}
       <section className="bg-navy-950">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 py-16 text-center">
-          <h2 className="max-w-2xl text-3xl font-bold tracking-tight text-white">
-            İşlemlerinizi bize bırakın, siz denizin keyfini çıkarın
+          <h2 className="text-3xl font-bold tracking-tight text-white">
+            {general.cta.title}
           </h2>
-          <p className="max-w-xl text-navy-100">
-            Bayrak tescili, transitlog, gümrük veya şirket kuruluşu — hangi
-            konuda olursa olsun, ilk görüşme için bize ulaşın.
-          </p>
+          <p className="max-w-xl text-navy-100">{general.cta.text}</p>
           <div className="flex flex-wrap justify-center gap-3">
-            <Link
-              href="/iletisim"
+            <SmartLink
+              href={general.cta.primary.href}
               className="rounded-lg bg-orange-600 px-6 py-3 font-bold text-white transition hover:bg-orange-700"
             >
-              İletişim Formu
-            </Link>
-            <a
-              href={site.phoneHref}
+              {general.cta.primary.label}
+            </SmartLink>
+            <SmartLink
+              href={general.cta.secondary.href}
               className="flex items-center gap-2 rounded-lg border border-navy-500 px-6 py-3 font-bold text-white transition hover:border-orange-500 hover:text-orange-400"
             >
-              <Icon name="phone" className="size-4" />
-              {site.phone}
-            </a>
+              {general.cta.secondary.href.startsWith("tel:") && (
+                <Icon name="phone" className="size-4" />
+              )}
+              {general.cta.secondary.label}
+            </SmartLink>
           </div>
         </div>
       </section>

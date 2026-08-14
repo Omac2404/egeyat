@@ -5,10 +5,13 @@ import {
   text,
   boolean,
   timestamp,
+  date,
   uuid,
   jsonb,
   integer,
 } from "drizzle-orm/pg-core";
+import type { AnnouncementBlock } from "@/lib/content/announcements";
+import type { Service, ServiceSection } from "@/lib/content/services";
 
 // ---------- Enums ----------
 
@@ -26,6 +29,8 @@ export const users = pgTable("users", {
   name: text("name").notNull(),
   passwordHash: text("password_hash").notNull(),
   role: roleEnum("role").notNull().default("editor"),
+  // Editör rolü için erişilebilir panel sekmeleri (admin tümüne erişir)
+  permissions: jsonb("permissions").$type<string[]>().notNull().default([]),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }),
 });
@@ -60,6 +65,66 @@ export const submissions = pgTable("submissions", {
   meta: jsonb("meta").$type<Record<string, string>>(),
   read: boolean("read").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+// ---------- Duyurular (panelden yönetilir) ----------
+
+export const announcements = pgTable("announcements", {
+  id: serial("id").primaryKey(),
+  slug: text("slug").notNull().unique(),
+  title: text("title").notNull(),
+  date: date("date", { mode: "string" }).notNull(),
+  summary: text("summary").notNull().default(""),
+  blocks: jsonb("blocks").$type<AnnouncementBlock[]>().notNull().default([]),
+  published: boolean("published").notNull().default(true),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }),
+});
+
+// ---------- Hizmet sayfaları (panelden yönetilir) ----------
+
+export const services = pgTable("services", {
+  id: serial("id").primaryKey(),
+  slug: text("slug").notNull().unique(),
+  title: text("title").notNull(),
+  shortTitle: text("short_title").notNull().default(""),
+  // components/site/Icon.tsx içindeki isimlerden biri
+  icon: text("icon").$type<Service["icon"]>().notNull().default("anchor"),
+  summary: text("summary").notNull().default(""),
+  intro: text("intro").notNull().default(""),
+  // Detay sayfasındaki hizmet görseli (public/hizmet-gorselleri), null → yer tutucu
+  image: text("image"),
+  sections: jsonb("sections").$type<ServiceSection[]>().notNull().default([]),
+  sortOrder: integer("sort_order").notNull().default(0),
+  published: boolean("published").notNull().default(true),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }),
+});
+
+// ---------- Mevzuat belgeleri (panelden yönetilir) ----------
+
+export const mevzuat = pgTable("mevzuat", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  // null → dış bağlantı yok
+  href: text("href"),
+  // Yüklenen belgenin public yolu (/belgeler/...), null → dosya yok
+  filePath: text("file_path"),
+  published: boolean("published").notNull().default(true),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }),
+});
+
+// ---------- Faydalı bağlantılar (mevzuat sayfası yan paneli) ----------
+
+export const usefulLinks = pgTable("useful_links", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  href: text("href").notNull(),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }),
 });
 
 // ---------- Tekneler / turlar — tasarım direktifleriyle detaylanacak ----------

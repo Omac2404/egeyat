@@ -4,9 +4,16 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { services } from "@/lib/content/services";
 import { site } from "@/lib/site";
 import { Icon } from "./Icon";
+
+export type NavService = { slug: string; title: string };
+export type SocialLinks = {
+  instagram: string;
+  facebook: string;
+  linkedin: string;
+  x: string;
+};
 
 const navItems = [
   { href: "/", label: "Ana Sayfa" },
@@ -17,7 +24,22 @@ const navItems = [
   { href: "/iletisim", label: "İletişim" },
 ];
 
-export function Header() {
+export function Header({
+  services,
+  social,
+}: {
+  services: NavService[];
+  social: SocialLinks;
+}) {
+  const socialItems = (
+    [
+      ["instagram", social.instagram],
+      ["facebook", social.facebook],
+      ["linkedin", social.linkedin],
+      ["x", social.x],
+    ] as const
+  ).filter(([, href]) => href);
+
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -49,23 +71,24 @@ export function Header() {
             </a>
           </div>
           <div className="flex items-center gap-3">
-            <a
-              href={site.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-orange-400"
-              aria-label="Instagram"
-            >
-              <Icon name="instagram" className="size-3.5" />
-            </a>
-            <span className="flex gap-1.5 border-l border-navy-700 pl-3 font-semibold">
-              <span>TR</span>
-              <span
-                className="cursor-default text-navy-300"
-                title="İngilizce sürüm hazırlanıyor"
+            {socialItems.map(([name, href]) => (
+              <a
+                key={name}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-orange-400"
+                aria-label={name}
               >
-                EN
-              </span>
+                <Icon name={name} className="size-3.5" />
+              </a>
+            ))}
+            <span
+              className={`text-navy-200 ${
+                socialItems.length > 0 ? "border-l border-navy-700 pl-3" : ""
+              }`}
+            >
+              Tüm hakları saklıdır
             </span>
           </div>
         </div>
@@ -76,7 +99,7 @@ export function Header() {
           <Link href="/" className="shrink-0" onClick={() => setOpen(false)}>
             <Image
               src="/logo.png"
-              alt="Ege Yatçılık — Gemi Acenteliği Müşavirlik"
+              alt="Ege Yatçılık Gemi Acenteliği Müşavirlik"
               width={220}
               height={58}
               priority
@@ -86,7 +109,10 @@ export function Header() {
 
           {/* Masaüstü menü */}
           <nav className="hidden items-center gap-1 lg:flex">
-            {navItems.map((item) =>
+            {/* İletişim masaüstünde turuncu buton olarak ayrıca basılıyor */}
+            {navItems
+              .filter((item) => item.href !== "/iletisim")
+              .map((item) =>
               item.hasDropdown ? (
                 <div key={item.href} className="group relative">
                   <Link
@@ -108,13 +134,13 @@ export function Header() {
                       <path d="m6 9 6 6 6-6" />
                     </svg>
                   </Link>
-                  <div className="invisible absolute left-0 top-full w-72 pt-1 opacity-0 transition group-hover:visible group-hover:opacity-100">
+                  <div className="invisible absolute left-0 top-full w-max min-w-72 pt-1 opacity-0 transition group-hover:visible group-hover:opacity-100">
                     <div className="rounded-xl border border-line bg-white p-2 shadow-lg">
                       {services.map((s) => (
                         <Link
                           key={s.slug}
                           href={`/hizmetlerimiz/${s.slug}`}
-                          className="block rounded-lg px-3 py-2 text-sm font-medium text-navy-900 hover:bg-navy-50 hover:text-orange-600"
+                          className="block whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium text-navy-900 hover:bg-navy-50 hover:text-orange-600"
                         >
                           {s.title}
                         </Link>
@@ -140,7 +166,7 @@ export function Header() {
               href="/iletisim"
               className="ml-2 rounded-lg bg-orange-600 px-4 py-2 text-sm font-bold text-white transition hover:bg-orange-700"
             >
-              Teklif Alın
+              İletişim
             </Link>
           </nav>
 

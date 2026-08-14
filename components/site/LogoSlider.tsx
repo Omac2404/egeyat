@@ -1,9 +1,7 @@
+import Image from "next/image";
 import { institutions } from "@/lib/site";
 
-/**
- * Footer'ın hemen üstünde kayan kurum logo barı.
- * Gerçek logolar geldiğinde "LOGO" rozetleri <Image> ile değiştirilecek.
- */
+// Footer'ın hemen üstünde kayan kurum logo barı.
 function Track({ ariaHidden = false }: { ariaHidden?: boolean }) {
   return (
     <ul
@@ -12,13 +10,17 @@ function Track({ ariaHidden = false }: { ariaHidden?: boolean }) {
     >
       {institutions.map((k) => (
         <li
-          key={k}
+          key={k.name}
           className="flex items-center gap-3 whitespace-nowrap rounded-xl border border-line bg-white px-5 py-3 shadow-sm"
         >
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-navy-50 text-[9px] font-bold text-navy-400">
-            LOGO
-          </span>
-          <span className="text-sm font-semibold text-navy-800">{k}</span>
+          <Image
+            src={k.logo}
+            alt={k.name}
+            width={80}
+            height={80}
+            className="size-20 shrink-0 rounded-lg object-contain"
+          />
+          <span className="text-sm font-semibold text-navy-800">{k.name}</span>
         </li>
       ))}
     </ul>

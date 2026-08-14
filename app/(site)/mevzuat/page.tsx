@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
-import { mevzuatList, usefulLinks } from "@/lib/content/mevzuat";
+import { asc, eq } from "drizzle-orm";
+import { db } from "@/db";
+import { mevzuat, usefulLinks as usefulLinksTable } from "@/db/schema";
 import { PageHero } from "@/components/site/PageHero";
 import { Icon } from "@/components/site/Icon";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Mevzuat",
@@ -9,7 +13,22 @@ export const metadata: Metadata = {
     "Yat turizmi, deniz turizmi ve tekne işlemlerine ilişkin güncel mevzuat ve faydalı bağlantılar.",
 };
 
-export default function MevzuatPage() {
+export default async function MevzuatPage() {
+  const rows = await db
+    .select()
+    .from(mevzuat)
+    .where(eq(mevzuat.published, true))
+    .orderBy(asc(mevzuat.sortOrder), asc(mevzuat.id));
+  // Yüklenen dosya varsa o, yoksa dış bağlantı kullanılır
+  const mevzuatList = rows.map((m) => ({
+    ...m,
+    href: m.filePath ?? m.href,
+  }));
+  const usefulLinks = await db
+    .select()
+    .from(usefulLinksTable)
+    .orderBy(asc(usefulLinksTable.sortOrder), asc(usefulLinksTable.id));
+
   return (
     <>
       <PageHero

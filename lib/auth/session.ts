@@ -16,7 +16,28 @@ export type SessionUser = {
   name: string;
   email: string;
   role: "admin" | "editor";
+  permissions: string[];
 };
+
+// Panel sekmeleri; editör rolündeki kullanıcılar yalnızca izinli olduklarına girer
+export const ADMIN_SECTIONS = [
+  { key: "genel", label: "Genel İçerikler", route: "/admin" },
+  { key: "hakkimizda", label: "Hakkımızda", route: "/admin/hakkimizda" },
+  { key: "hizmetler", label: "Hizmetler", route: "/admin/hizmetler" },
+  { key: "duyurular", label: "Duyurular", route: "/admin/duyurular" },
+  { key: "mevzuat", label: "Mevzuat", route: "/admin/mevzuat" },
+  { key: "iletisim", label: "İletişim", route: "/admin/iletisim" },
+  { key: "teknik", label: "Teknik", route: "/admin/teknik" },
+] as const;
+
+export type AdminSection = (typeof ADMIN_SECTIONS)[number]["key"];
+
+// Süper admin: tüm yetkilere sahiptir ve hiçbir kullanıcı tarafından silinemez
+export const SUPER_ADMIN_EMAIL = "webreta.digital@gmail.com";
+
+export function canAccess(user: SessionUser, section: AdminSection) {
+  return user.role === "admin" || user.permissions.includes(section);
+}
 
 const hashToken = (token: string) =>
   createHash("sha256").update(token).digest("hex");
@@ -66,6 +87,7 @@ export const getCurrentUser = cache(async (): Promise<SessionUser | null> => {
       name: users.name,
       email: users.email,
       role: users.role,
+      permissions: users.permissions,
     })
     .from(sessions)
     .innerJoin(users, eq(sessions.userId, users.id))
@@ -88,7 +110,13 @@ export const getCurrentUser = cache(async (): Promise<SessionUser | null> => {
       .where(eq(sessions.id, row.sessionId));
   }
 
-  return { id: row.id, name: row.name, email: row.email, role: row.role };
+  return {
+    id: row.id,
+    name: row.name,
+    email: row.email,
+    role: row.role,
+    permissions: row.permissions ?? [],
+  };
 });
 
 export async function requireUser(): Promise<SessionUser> {
@@ -101,4 +129,14 @@ export async function requireAdmin(): Promise<SessionUser> {
   const user = await requireUser();
   if (user.role !== "admin") redirect("/admin");
   return user;
+}
+
+// İlgili sekmeye erişim yetkisi ister; yoksa erişebildiği ilk sekmeye yönlendirir
+export async function requireSection(
+  section: AdminSection
+): Promise<SessionUser> {
+  const user = await requireUser();
+  if (canAccess(user, section)) return user;
+  const first = ADMIN_SECTIONS.find((s) => canAccess(user, s.key));
+  redirect(first ? first.route : "/");
 }

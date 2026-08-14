@@ -1,10 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import { services } from "@/lib/content/services";
 import { site } from "@/lib/site";
 import { Icon } from "./Icon";
+import type { NavService } from "./Header";
 
-export function Footer() {
+export function Footer({ services }: { services: NavService[] }) {
   return (
     <footer className="rounded-t-[2rem] bg-navy-950 text-navy-100 sm:rounded-t-[2.5rem]">
       {/* CTA şeridi */}
@@ -15,7 +15,7 @@ export function Footer() {
               İşleminiz için hemen görüşelim
             </p>
             <p className="mt-1 text-sm text-navy-300">
-              Bayrak tescili, transitlog, gümrük — ilk görüşme için bize
+              Bayrak tescili, transitlog, gümrük; ilk görüşme için bize
               ulaşın, aynı gün dönüş yapalım.
             </p>
           </div>
@@ -42,48 +42,18 @@ export function Footer() {
 
       {/* Ana alan */}
       <div className="mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:grid-cols-2 lg:grid-cols-12">
-        <div className="lg:col-span-4">
-          <div className="w-fit rounded-2xl bg-white p-3.5 shadow-lg shadow-navy-900/40">
-            <Image
-              src="/logo.png"
-              alt="Ege Yatçılık — Gemi Acenteliği Müşavirlik"
-              width={200}
-              height={53}
-              className="h-11 w-auto"
-            />
-          </div>
+        <div className="lg:col-span-3">
+          <p className="text-xl font-bold text-white">{site.name}</p>
           <p className="mt-5 max-w-sm text-sm leading-relaxed text-navy-200">
-            2002&apos;den beri İzmir merkezli şirketimizle Türk ve yabancı
-            bayraklı yat sahiplerine tek işimiz olan acentelik ve danışmanlık
-            hizmetini sunuyoruz.
+            2002&apos;den beri İzmir&apos;de yat sahiplerine acentelik ve
+            danışmanlık hizmeti sunuyoruz.
           </p>
-          <div className="mt-6 flex gap-2.5">
-            <a
-              href={site.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-              className="flex size-10 items-center justify-center rounded-xl bg-navy-900 text-navy-200 transition hover:bg-orange-600 hover:text-white"
-            >
-              <Icon name="instagram" className="size-4.5" />
-            </a>
-            <a
-              href={`https://wa.me/${site.whatsapp}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="WhatsApp"
-              className="flex size-10 items-center justify-center rounded-xl bg-navy-900 text-navy-200 transition hover:bg-orange-600 hover:text-white"
-            >
-              <Icon name="whatsapp" className="size-4.5" />
-            </a>
-            <a
-              href={`mailto:${site.email}`}
-              aria-label="E-posta"
-              className="flex size-10 items-center justify-center rounded-xl bg-navy-900 text-navy-200 transition hover:bg-orange-600 hover:text-white"
-            >
-              <Icon name="mail" className="size-4.5" />
-            </a>
-          </div>
+          <a
+            href={`mailto:${site.email}`}
+            className="mt-4 inline-block text-sm font-semibold text-navy-200 transition hover:text-orange-400"
+          >
+            {site.email}
+          </a>
         </div>
 
         <div className="lg:col-span-2">
@@ -110,7 +80,7 @@ export function Footer() {
           </ul>
         </div>
 
-        <div className="lg:col-span-3">
+        <div className="lg:col-span-4">
           <p className="mb-4 text-sm font-bold uppercase tracking-wider text-white">
             Hizmetlerimiz
           </p>
@@ -119,7 +89,7 @@ export function Footer() {
               <li key={s.slug}>
                 <Link
                   href={`/hizmetlerimiz/${s.slug}`}
-                  className="text-navy-200 transition hover:text-orange-400"
+                  className="whitespace-nowrap text-navy-200 transition hover:text-orange-400"
                 >
                   {s.title}
                 </Link>
@@ -130,37 +100,23 @@ export function Footer() {
 
         <div className="lg:col-span-3">
           <p className="mb-4 text-sm font-bold uppercase tracking-wider text-white">
-            İletişim
+            Yasal
           </p>
-          <ul className="space-y-3.5 text-sm">
-            <li className="flex gap-3">
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-navy-900 text-orange-400">
-                <Icon name="pin" className="size-4" />
-              </span>
-              <span className="text-navy-200">{site.offices[0].address}</span>
-            </li>
-            <li className="flex items-center gap-3">
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-navy-900 text-orange-400">
-                <Icon name="phone" className="size-4" />
-              </span>
-              <a
-                href={site.phoneHref}
-                className="text-navy-200 hover:text-orange-400"
-              >
-                {site.phone}
-              </a>
-            </li>
-            <li className="flex items-center gap-3">
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-navy-900 text-orange-400">
-                <Icon name="mail" className="size-4" />
-              </span>
-              <a
-                href={`mailto:${site.email}`}
-                className="text-navy-200 hover:text-orange-400"
-              >
-                {site.email}
-              </a>
-            </li>
+          <ul className="space-y-2.5 text-sm">
+            {[
+              ["/kvkk", "KVKK Aydınlatma Metni"],
+              ["/gizlilik-politikasi", "Gizlilik Politikası"],
+              ["/cerez-politikasi", "Çerez Politikası"],
+            ].map(([href, label]) => (
+              <li key={href}>
+                <Link
+                  href={href}
+                  className="whitespace-nowrap text-navy-200 transition hover:text-orange-400"
+                >
+                  {label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
@@ -171,9 +127,22 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} {site.legalName} Her hakkı saklıdır.
           </p>
-          <Link href="/admin" className="transition hover:text-orange-400">
-            Yönetim
-          </Link>
+          <a
+            href="https://webreta.com.tr"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Webreta"
+            className="opacity-70 transition hover:opacity-100"
+          >
+            {/* Mavi logo brightness-0 invert ile beyaza çevriliyor */}
+            <Image
+              src="/webreta-logo.webp"
+              alt="Webreta"
+              width={343}
+              height={54}
+              className="h-3 w-auto brightness-0 invert"
+            />
+          </a>
         </div>
       </div>
     </footer>

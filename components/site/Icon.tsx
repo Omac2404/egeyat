@@ -9,9 +9,15 @@ type IconName =
   | "pin"
   | "whatsapp"
   | "instagram"
+  | "facebook"
+  | "linkedin"
+  | "x"
   | "arrow"
   | "doc"
-  | "external";
+  | "external"
+  | "home"
+  | "megaphone"
+  | "settings";
 
 const paths: Record<IconName, React.ReactNode> = {
   flag: (
@@ -70,6 +76,21 @@ const paths: Record<IconName, React.ReactNode> = {
       <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" />
     </>
   ),
+  facebook: (
+    <path d="M14 3h-2.5A3.5 3.5 0 0 0 8 6.5V9H5.5v4H8v8h4v-8h2.5l.5-4h-3V7a1 1 0 0 1 1-1h2Z" />
+  ),
+  linkedin: (
+    <>
+      <rect x="2" y="2" width="20" height="20" rx="3" />
+      <path d="M7 10.5V17M7 7v.01M11.5 17v-3.5a2.5 2.5 0 0 1 5 0V17M11.5 17v-6.5" />
+    </>
+  ),
+  x: (
+    <>
+      <path d="M4 3h4.3l11.7 18h-4.3L4 3Z" />
+      <path d="M20 3 4.5 21" />
+    </>
+  ),
   arrow: <path d="M5 12h14m-6-6 6 6-6 6" />,
   doc: (
     <>
@@ -81,6 +102,24 @@ const paths: Record<IconName, React.ReactNode> = {
     <>
       <path d="M15 3h6v6M10 14 21 3" />
       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+    </>
+  ),
+  home: (
+    <>
+      <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+      <path d="M9 22V12h6v10" />
+    </>
+  ),
+  megaphone: (
+    <>
+      <path d="m3 11 18-5v12L3 14v-3z" />
+      <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6" />
+    </>
+  ),
+  settings: (
+    <>
+      <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+      <circle cx="12" cy="12" r="3" />
     </>
   ),
 };

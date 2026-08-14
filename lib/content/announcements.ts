@@ -25,19 +25,25 @@ export const announcements: Announcement[] = [
     blocks: [
       {
         type: "p",
-        text: "Bağlama kütüğüne kayıtlı gemi, deniz ve iç su araçlarının 2026 yılı ruhsatname harç bedelleri, tekne boyuna göre aşağıdaki şekilde uygulanacaktır. (Demo içerik — güncel tutarlar yayın öncesi eklenecektir.)",
+        text: "Bağlama kütüğüne kayıtlı gemi, deniz ve iç su araçlarının 2026 yılı ruhsatname harç bedelleri, tekne boyuna göre aşağıdaki şekilde uygulanacaktır.",
       },
       {
         type: "table",
         caption: "2026 Yılı Bağlama Kütüğü Ruhsatname Harç Bedelleri",
         head: ["Tekne Boyu", "Harç Tutarı"],
         rows: [
-          ["5 metreden 8,99 metreye kadar", "— TL"],
-          ["9 metreden 11,99 metreye kadar", "— TL"],
-          ["12 metreden 19,99 metreye kadar", "— TL"],
-          ["20 metreden 29,99 metreye kadar", "— TL"],
-          ["30 metre ve üzeri", "— TL"],
+          ["5 metreden 6,99 metreye kadar olanlardan", "5.992,10 ₺"],
+          ["7 metreden 8,99 metreye kadar olanlardan", "8.560,20 ₺"],
+          ["9 metreden 11,99 metreye kadar olanlardan", "12.840,20 ₺"],
+          ["12 metreden 14,99 metreye kadar olanlardan", "25.680,70 ₺"],
+          ["15 metreden 19,99 metreye kadar olanlardan", "42.801,10 ₺"],
+          ["20 metreden 29,99 metreye kadar olanlardan", "85.602,30 ₺"],
+          ["30 metre ve daha büyük olanlardan", "171.204,70 ₺"],
         ],
+      },
+      {
+        type: "p",
+        text: "Bağlama Kütüğü Ruhsatnameleri 1, 2, 3, 4 ve 5 yıl geçerlilik süresiyle düzenlenebilmektedir. Yukarıdaki tabloda 1 yıllık harç miktarı yazılmıştır.",
       },
       {
         type: "p",
@@ -46,32 +52,64 @@ export const announcements: Announcement[] = [
     ],
   },
   {
-    slug: "2026-transitlog-seyir-izin-harclari",
-    title: "2026 Transitlog (Seyir İzin Belgesi) Harçları",
+    slug: "2026-turk-bayrakli-transitlog-ucretleri",
+    title: "2026 Yılı Türk Bayraklı Yatların Seyir İzin Belgesi (Transitlog) Ücretleri",
     date: "2026-01-05",
     summary:
-      "Yabancı bayraklı tekneler için 2026 yılı transitlog seyir izin belgesi harçları güncellendi.",
+      "Türk bayraklı yatların 2026 yılı seyir izin belgesi (transitlog) harç ve belge ücretleri açıklandı.",
     blocks: [
       {
         type: "p",
-        text: "Yabancı bayraklı özel ve ticari teknelerin Türk karasularındaki seyirleri için düzenlenen Seyir İzin Belgesi (Transitlog) harç tutarları 2026 yılı için güncellenmiştir. (Demo içerik — güncel tutarlar yayın öncesi eklenecektir.)",
+        text: "Türk bayraklı yatların 2026 yılı Seyir İzin Belgesi (Transitlog) harç tutarları ve belge ücretleri, tekne boyuna göre aşağıdaki şekilde uygulanacaktır.",
+      },
+      {
+        type: "table",
+        caption: "2026 Yılı Türk Bayraklı Yatların Transitlog Ücretleri",
+        head: ["Tekne Boyu", "Harç Tutarı", "Belge Ücreti"],
+        rows: [
+          ["5 metreden 9,99 metreye kadar olanlardan", "513,59 ₺", "900,00 ₺"],
+          ["10 metreden 14,99 metreye kadar olanlardan", "1.027,30 ₺", "900,00 ₺"],
+          ["15 metreden 19,99 metreye kadar olanlardan", "1.712,05 ₺", "900,00 ₺"],
+          ["20 metreden 24,99 metreye kadar olanlardan", "5.136,15 ₺", "900,00 ₺"],
+          ["25 metreden 29,99 metreye kadar olanlardan", "8.560,24 ₺", "900,00 ₺"],
+          ["30 metreden 39,99 metreye kadar olanlardan", "17.120,48 ₺", "900,00 ₺"],
+          ["40 metre ve daha büyük olanlardan", "34.257,60 ₺", "900,00 ₺"],
+        ],
       },
       {
         type: "p",
-        text: "Transitlog işlemlerinizin tamamı — başvuru, harç ödemesi ve belge teslimi — acenteliğimiz tarafından yürütülmektedir.",
+        text: "Transitlog işlemlerinizin tamamı (başvuru, harç ödemesi ve belge teslimi) acenteliğimiz tarafından yürütülmektedir.",
       },
     ],
   },
   {
-    slug: "2026-transitlog-ucretleri",
-    title: "2026 Transitlog Ücretleri",
+    slug: "2026-yabanci-bayrakli-transitlog-ucretleri",
+    title: "2026 Yılı Yabancı Bayraklı Yatların Seyir İzin Belgesi (Transitlog) Ücretleri",
     date: "2026-01-05",
     summary:
-      "2026 yılında uygulanacak transitlog düzenleme ücretlerine ilişkin bilgilendirme.",
+      "Yabancı bayraklı yatların 2026 yılı seyir izin belgesi (transitlog) harç ve belge ücretleri açıklandı.",
     blocks: [
       {
         type: "p",
-        text: "2026 yılında uygulanacak transitlog düzenleme ücretleri belirlenmiştir. Detaylı bilgi ve işlem başvurusu için ofislerimize ulaşabilirsiniz. (Demo içerik — güncel tutarlar yayın öncesi eklenecektir.)",
+        text: "Yabancı bayraklı özel ve ticari yatların Türk karasularındaki seyirleri için düzenlenen Seyir İzin Belgesi (Transitlog) 2026 yılı harç tutarları ve belge ücretleri, tekne boyuna göre aşağıdaki şekilde uygulanacaktır.",
+      },
+      {
+        type: "table",
+        caption: "2026 Yılı Yabancı Bayraklı Yatların Transitlog Ücretleri",
+        head: ["Tekne Boyu", "Harç Tutarı", "Belge Ücreti"],
+        rows: [
+          ["5 metreden 9,99 metreye kadar olanlardan", "1.540,70 ₺", "70,00 €"],
+          ["10 metreden 14,99 metreye kadar olanlardan", "3.081,60 ₺", "70,00 €"],
+          ["15 metreden 19,99 metreye kadar olanlardan", "5.136,10 ₺", "70,00 €"],
+          ["20 metreden 24,99 metreye kadar olanlardan", "15.408,40 ₺", "70,00 €"],
+          ["25 metreden 29,99 metreye kadar olanlardan", "25.680,70 ₺", "70,00 €"],
+          ["30 metreden 39,99 metreye kadar olanlardan", "51.361,40 ₺", "70,00 €"],
+          ["40 metre ve daha büyük olanlardan", "102.722,80 ₺", "70,00 €"],
+        ],
+      },
+      {
+        type: "p",
+        text: "Tablolarda belirtilen tutarlar, her yıl Ocak ayında yayımlanan tebliğe göre güncellenmektedir. Transitlog işlemlerinizin tamamı (başvuru, harç ödemesi ve belge teslimi) acenteliğimiz tarafından yürütülmektedir.",
       },
     ],
   },

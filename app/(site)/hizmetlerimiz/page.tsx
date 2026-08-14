@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { services } from "@/lib/content/services";
+import { getPublishedServices } from "@/lib/data/services";
 import { PageHero } from "@/components/site/PageHero";
 import { Icon } from "@/components/site/Icon";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Hizmetlerimiz",
@@ -10,7 +12,9 @@ export const metadata: Metadata = {
     "Yat bayrak tescili, ABD ve İngiltere şirket kuruluşu, acentelik, gümrük ve ticari gemi işlemleri.",
 };
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const services = await getPublishedServices();
+
   return (
     <>
       <PageHero

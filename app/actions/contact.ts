@@ -53,5 +53,13 @@ export async function submitContact(
     meta: subject ? { subject } : undefined,
   });
 
+  // E-posta bildirimi (SMTP ayarlıysa); hata mesaj kaydını engellemesin
+  try {
+    const { sendContactNotification } = await import("@/lib/mailer");
+    await sendContactNotification({ name, email, phone, subject, message });
+  } catch (err) {
+    console.error("İletişim e-postası gönderilemedi:", err);
+  }
+
   return { ok: true };
 }

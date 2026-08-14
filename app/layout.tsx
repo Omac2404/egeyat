@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { getTechnicalSettings } from "@/lib/data/technical";
+import { HeadCode } from "@/components/site/HeadCode";
 import "./globals.css";
 
 const inter = Inter({
@@ -7,21 +9,30 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: "Ege Yatçılık | Gemi Acenteliği & Müşavirlik",
-    template: "%s | Ege Yatçılık",
-  },
-  description:
-    "Ege Yatçılık — 2002'den beri İzmir'de yat bayrak tescili, şirket kuruluşu, acentelik, gümrük ve ticari gemi işlemleri.",
-};
+// Site başlığı, açıklaması ve favicon panelden (Teknik) yönetilir
+export async function generateMetadata(): Promise<Metadata> {
+  const technical = await getTechnicalSettings();
+  return {
+    title: {
+      default: technical.seo.title,
+      template: "%s | Ege Yatçılık",
+    },
+    description: technical.seo.description,
+    ...(technical.favicon ? { icons: { icon: technical.favicon } } : {}),
+  };
+}
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const technical = await getTechnicalSettings();
+
   return (
     <html lang="tr" className={inter.variable}>
-      <body>{children}</body>
+      <body>
+        <HeadCode code={technical.headCode} />
+        {children}
+      </body>
     </html>
   );
 }

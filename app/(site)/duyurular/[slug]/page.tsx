@@ -1,16 +1,22 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  announcements,
-  getAnnouncement,
-  formatDate,
-} from "@/lib/content/announcements";
+import { and, eq } from "drizzle-orm";
+import { db } from "@/db";
+import { announcements } from "@/db/schema";
+import { formatDate } from "@/lib/content/announcements";
 import { PageHero } from "@/components/site/PageHero";
 import { Icon } from "@/components/site/Icon";
 
-export function generateStaticParams() {
-  return announcements.map((a) => ({ slug: a.slug }));
+export const dynamic = "force-dynamic";
+
+async function getAnnouncement(slug: string) {
+  const rows = await db
+    .select()
+    .from(announcements)
+    .where(and(eq(announcements.slug, slug), eq(announcements.published, true)))
+    .limit(1);
+  return rows[0];
 }
 
 export async function generateMetadata({
@@ -18,7 +24,7 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const item = getAnnouncement((await params).slug);
+  const item = await getAnnouncement((await params).slug);
   if (!item) return {};
   return { title: item.title, description: item.summary };
 }
@@ -28,7 +34,7 @@ export default async function AnnouncementDetailPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const item = getAnnouncement((await params).slug);
+  const item = await getAnnouncement((await params).slug);
   if (!item) notFound();
 
   return (

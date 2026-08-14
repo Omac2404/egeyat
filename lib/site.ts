@@ -44,17 +44,16 @@ export const site = {
   ],
 } as const;
 
-// "İşlem yaptığımız kurumlar" — eski sitedeki kurum listesi (logolar eklenecek)
+// "İşlem yaptığımız kurumlar": logolar eski siteden alındı (public/kurumlar)
 export const institutions = [
-  "Ulaştırma ve Altyapı Bakanlığı",
-  "Kıyı Emniyeti Genel Müdürlüğü",
-  "Deniz Ticaret Odası",
-  "Ticaret Bakanlığı",
-  "Gümrük Muhafaza",
-  "Deniz Polisi (EGM)",
-  "Hudut ve Sahiller Sağlık GM",
-  "Kültür ve Turizm Bakanlığı",
-  "Hazine ve Maliye Bakanlığı",
-  "İzmir Ticaret Odası",
-  "State of Delaware (ABD)",
+  { name: "Ulaştırma ve Altyapı Bakanlığı", logo: "/kurumlar/ulastirmabakanligi.jpg" },
+  { name: "Kıyı Emniyeti Genel Müdürlüğü", logo: "/kurumlar/kiyiemniyeti.jpg" },
+  { name: "Deniz Ticaret Odası", logo: "/kurumlar/denizticaretodasi.jpg" },
+  { name: "Ticaret Bakanlığı", logo: "/kurumlar/gumrukticaret.jpg" },
+  { name: "Gümrük Muhafaza", logo: "/kurumlar/gumrukmuhavaza.jpg" },
+  { name: "Deniz Polisi (EGM)", logo: "/kurumlar/denizpolisi.jpg" },
+  { name: "Hudut ve Sahiller Sağlık GM", logo: "/kurumlar/hudutsahiller.jpg" },
+  { name: "Kültür ve Turizm Bakanlığı", logo: "/kurumlar/kulturveturizm.jpg" },
+  { name: "Hazine ve Maliye Bakanlığı", logo: "/kurumlar/hazinevemaliye.jpg" },
+  { name: "İzmir Ticaret Odası", logo: "/kurumlar/izmirticaretodasi.jpg" },
 ] as const;

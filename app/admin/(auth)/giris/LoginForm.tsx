@@ -16,12 +16,12 @@ export function LoginForm() {
     <form action={formAction} className="flex flex-col gap-4">
       <input type="hidden" name="next" value={next} />
       <label className="flex flex-col gap-1 text-sm font-medium text-navy-900">
-        E-posta
+        Kullanıcı Adı
         <input
-          type="email"
-          name="email"
+          type="text"
+          name="username"
           required
-          autoComplete="email"
+          autoComplete="username"
           className="rounded-lg border border-line px-3 py-2 text-base outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
         />
       </label>

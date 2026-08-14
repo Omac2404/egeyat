@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { announcements } from "@/lib/content/announcements";
+import { desc, eq } from "drizzle-orm";
+import { db } from "@/db";
+import { announcements as announcementsTable } from "@/db/schema";
 import { PageHero } from "@/components/site/PageHero";
 import { Icon } from "@/components/site/Icon";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Duyurular",
@@ -10,7 +14,13 @@ export const metadata: Metadata = {
     "Bağlama kütüğü harçları, transitlog ücretleri ve denizcilik sektörüne dair güncel duyurular.",
 };
 
-export default function AnnouncementsPage() {
+export default async function AnnouncementsPage() {
+  const announcements = await db
+    .select()
+    .from(announcementsTable)
+    .where(eq(announcementsTable.published, true))
+    .orderBy(desc(announcementsTable.date), desc(announcementsTable.id));
+
   return (
     <>
       <PageHero
@@ -52,10 +62,11 @@ export default function AnnouncementsPage() {
             </Link>
           ))}
         </div>
-        <p className="mt-8 text-center text-xs text-muted">
-          Duyurular admin panelinden yönetilecek — yıllık harç güncellemeleri
-          buradan yayınlanacak.
-        </p>
+        {announcements.length === 0 && (
+          <p className="mt-8 text-center text-sm text-muted">
+            Henüz yayınlanmış duyuru bulunmuyor.
+          </p>
+        )}
       </section>
     </>
   );
