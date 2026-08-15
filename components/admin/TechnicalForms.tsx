@@ -9,6 +9,7 @@ import {
   saveFavicon,
   saveSeo,
   saveSitemap,
+  sendSmtpTest,
   type TechnicalState,
 } from "@/app/actions/teknik";
 import { SavedToast } from "@/components/admin/SavedToast";
@@ -145,6 +146,54 @@ export function SmtpForm({
         />
       </label>
       <FormStatus state={state} pending={pending} />
+    </form>
+  );
+}
+
+// Kayıtlı SMTP ayarlarıyla test e-postası gönderen alan (SMTP formunun altında durur)
+export function SmtpTestForm({ defaultTo }: { defaultTo: string }) {
+  const [state, formAction, pending] = useActionState<TechnicalState, FormData>(
+    sendSmtpTest,
+    {}
+  );
+  return (
+    <form
+      action={formAction}
+      className="mt-4 space-y-3 rounded-2xl border border-dashed border-line bg-navy-50/40 p-5"
+    >
+      <p className="text-sm font-bold text-navy-900">SMTP Testi</p>
+      <p className="text-xs text-muted">
+        Kayıtlı ayarlarla aşağıdaki adrese bir test e-postası gönderir. Yukarıda
+        değişiklik yaptıysanız önce kaydedin.
+      </p>
+      <div className="flex flex-col gap-2 sm:flex-row">
+        <input
+          type="email"
+          name="to"
+          required
+          defaultValue={defaultTo}
+          placeholder="ornek@adres.com"
+          className={inputCls}
+        />
+        <button
+          type="submit"
+          disabled={pending}
+          className="shrink-0 rounded-lg border border-orange-600 px-5 py-2 text-sm font-bold text-orange-600 transition hover:bg-orange-600 hover:text-white disabled:opacity-60"
+        >
+          {pending ? "Gönderiliyor…" : "Test Gönder"}
+        </button>
+      </div>
+      {state.ok && !state.error && (
+        <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700">
+          Test e-postası gönderildi. Gelen kutusunu ve spam klasörünü kontrol
+          edin.
+        </p>
+      )}
+      {state.error && (
+        <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
+          {state.error}
+        </p>
+      )}
     </form>
   );
 }

@@ -8,6 +8,7 @@ import {
   saveTechnicalSettingsToDb,
 } from "@/lib/data/technical";
 import { saveUploadedFile, removeUploadedFile } from "@/lib/uploads";
+import { sendTestMail } from "@/lib/mailer";
 
 export type TechnicalState = { ok?: boolean; error?: string };
 
@@ -65,6 +66,29 @@ export async function saveSmtp(
   });
   revalidateTechnical();
   return { ok: true };
+}
+
+const testMailSchema = z
+  .string()
+  .trim()
+  .email("Geçerli bir e-posta adresi girin");
+
+export async function sendSmtpTest(
+  _prev: TechnicalState,
+  formData: FormData
+): Promise<TechnicalState> {
+  await requireSection("teknik");
+  const parsed = testMailSchema.safeParse(formData.get("to") ?? "");
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Adresi kontrol edin." };
+  }
+  try {
+    await sendTestMail(parsed.data);
+    return { ok: true };
+  } catch (err) {
+    const detail = err instanceof Error ? err.message : "bilinmeyen hata";
+    return { error: `Gönderim başarısız: ${detail}` };
+  }
 }
 
 const FAVICON_EXTENSIONS = new Set(["ico", "png", "svg"]);

@@ -41,7 +41,7 @@ export default async function MevzuatPage() {
           {mevzuatList.map((m) => (
             <div
               key={m.title}
-              className="flex items-center justify-between gap-4 rounded-2xl border border-line bg-white p-5 shadow-sm"
+              className="flex flex-col gap-4 rounded-2xl border border-line bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between"
             >
               <div className="flex items-start gap-3">
                 <Icon
@@ -55,13 +55,13 @@ export default async function MevzuatPage() {
                   href={m.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="shrink-0 rounded-lg bg-navy-900 px-4 py-2 text-sm font-bold text-white transition hover:bg-orange-600"
+                  className="shrink-0 self-start rounded-lg bg-navy-900 px-4 py-2 text-sm font-bold text-white transition hover:bg-orange-600 sm:self-center"
                 >
                   İncele
                 </a>
               ) : (
                 <span
-                  className="shrink-0 rounded-lg bg-navy-50 px-4 py-2 text-sm font-semibold text-navy-400"
+                  className="shrink-0 self-start rounded-lg bg-navy-50 px-4 py-2 text-sm font-semibold text-navy-400 sm:self-center"
                   title="Belge yayın öncesi eklenecek"
                 >
                   Belge eklenecek

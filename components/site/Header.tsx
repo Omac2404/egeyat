@@ -195,35 +195,43 @@ export function Header({
           </button>
         </div>
 
-        {/* Mobil menü */}
-        {open && (
-          <nav className="rounded-b-[2.5rem] border-t border-line bg-white px-6 pb-5 lg:hidden">
-            {navItems.map((item) => (
-              <div key={item.href}>
-                <Link
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className={`block rounded-lg px-3 py-2.5 font-semibold ${
-                    isActive(item.href) ? "text-orange-600" : "text-navy-900"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-                {item.hasDropdown &&
-                  services.map((s) => (
-                    <Link
-                      key={s.slug}
-                      href={`/hizmetlerimiz/${s.slug}`}
-                      onClick={() => setOpen(false)}
-                      className="block rounded-lg py-2 pl-7 pr-3 text-sm text-muted"
-                    >
-                      {s.title}
-                    </Link>
-                  ))}
-              </div>
-            ))}
-          </nav>
-        )}
+        {/* Mobil menü — yükseklik ve opaklık animasyonuyla yumuşakça açılıp kapanır */}
+        <div
+          className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out lg:hidden ${
+            open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+          }`}
+        >
+          <div className="min-h-0 overflow-hidden">
+            <nav className="rounded-b-[2.5rem] border-t border-line bg-white px-6 pb-5">
+              {navItems.map((item) => (
+                <div key={item.href}>
+                  <Link
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    tabIndex={open ? undefined : -1}
+                    className={`block rounded-lg px-3 py-2.5 font-semibold ${
+                      isActive(item.href) ? "text-orange-600" : "text-navy-900"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                  {item.hasDropdown &&
+                    services.map((s) => (
+                      <Link
+                        key={s.slug}
+                        href={`/hizmetlerimiz/${s.slug}`}
+                        onClick={() => setOpen(false)}
+                        tabIndex={open ? undefined : -1}
+                        className="block rounded-lg py-2 pl-7 pr-3 text-sm text-muted"
+                      >
+                        {s.title}
+                      </Link>
+                    ))}
+                </div>
+              ))}
+            </nav>
+          </div>
+        </div>
       </div>
     </header>
   );

@@ -37,7 +37,7 @@ export function LogoSlider() {
         {/* Kenar solmaları */}
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-[#f8f8fc] to-transparent" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-[#f8f8fc] to-transparent" />
-        <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused]">
+        <div className="flex w-max animate-marquee [animation-duration:24s] group-hover:[animation-play-state:paused] sm:[animation-duration:45s]">
           <Track />
           <Track ariaHidden />
         </div>

@@ -41,10 +41,10 @@ export function Footer({ services }: { services: NavService[] }) {
       </div>
 
       {/* Ana alan */}
-      <div className="mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:grid-cols-2 lg:grid-cols-12">
+      <div className="mx-auto grid max-w-6xl gap-12 px-4 py-16 text-center sm:grid-cols-2 sm:text-left lg:grid-cols-12">
         <div className="lg:col-span-3">
           <p className="text-xl font-bold text-white">{site.name}</p>
-          <p className="mt-5 max-w-sm text-sm leading-relaxed text-navy-200">
+          <p className="mx-auto mt-5 max-w-sm text-sm leading-relaxed text-navy-200 sm:mx-0">
             2002&apos;den beri İzmir&apos;de yat sahiplerine acentelik ve
             danışmanlık hizmeti sunuyoruz.
           </p>
@@ -123,7 +123,7 @@ export function Footer({ services }: { services: NavService[] }) {
 
       {/* Alt bar */}
       <div className="border-t border-navy-800/80">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-navy-300 sm:flex-row">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-5 text-center text-xs text-navy-300 sm:flex-row sm:text-left">
           <p>
             © {new Date().getFullYear()} {site.legalName} Her hakkı saklıdır.
           </p>

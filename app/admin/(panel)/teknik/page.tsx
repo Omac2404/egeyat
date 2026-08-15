@@ -5,6 +5,7 @@ import { getTechnicalSettings } from "@/lib/data/technical";
 import {
   HeadCodeForm,
   SmtpForm,
+  SmtpTestForm,
   FaviconForm,
   SeoForm,
   SitemapForm,
@@ -55,6 +56,9 @@ export default async function AdminTechnicalPage() {
             SMTP ve E-posta Ayarları
           </h2>
           <SmtpForm initial={settings.smtp} mailTo={settings.mailTo} />
+          <SmtpTestForm
+            defaultTo={settings.mailTo.split(",")[0]?.trim() ?? ""}
+          />
         </section>
 
         <section>

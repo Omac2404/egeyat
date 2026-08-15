@@ -6,6 +6,7 @@ import { getPublishedServices } from "@/lib/data/services";
 import { getGeneralSettings } from "@/lib/data/general";
 import { formatDate } from "@/lib/content/announcements";
 import { Icon } from "@/components/site/Icon";
+import { ServiceCard } from "@/components/site/ServiceCard";
 import { MediaPlaceholder } from "@/components/site/MediaPlaceholder";
 import { HeroVideo } from "@/components/site/HeroVideo";
 import { FlagSlider } from "@/components/site/FlagSlider";
@@ -109,28 +110,13 @@ export default async function HomePage() {
         </div>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((s) => (
-            <Link
+            <ServiceCard
               key={s.slug}
-              href={`/hizmetlerimiz/${s.slug}`}
-              className="group rounded-2xl bg-navy-900 p-6 shadow-sm transition hover:-translate-y-0.5 hover:bg-navy-800 hover:shadow-md"
-            >
-              <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-white/10 text-white transition group-hover:bg-orange-600">
-                <Icon name={s.icon} className="size-6" />
-              </div>
-              <h3 className="text-lg font-bold text-white group-hover:text-orange-400">
-                {s.title}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-navy-100">
-                {s.summary}
-              </p>
-              <p className="mt-4 flex items-center gap-1.5 text-sm font-semibold text-orange-400">
-                Detaylı bilgi
-                <Icon
-                  name="arrow"
-                  className="size-4 transition group-hover:translate-x-1"
-                />
-              </p>
-            </Link>
+              slug={s.slug}
+              title={s.title}
+              summary={s.summary}
+              icon={s.icon}
+            />
           ))}
         </div>
       </section>
@@ -160,7 +146,7 @@ export default async function HomePage() {
               <Link
                 key={a.slug}
                 href={`/duyurular/${a.slug}`}
-                className="group rounded-2xl border border-line bg-white p-6 shadow-sm transition hover:border-orange-200 hover:shadow-md"
+                className="group rounded-2xl border border-navy-900 bg-white p-6 shadow-sm transition hover:shadow-md"
               >
                 <p className="text-xs font-semibold uppercase tracking-wider text-orange-600">
                   {formatDate(a.date)}

@@ -12,19 +12,28 @@ export function PageHero({
 }) {
   return (
     <section className="relative overflow-hidden bg-navy-950 text-white">
-      {/* Arka plan: 6628 kesimi — yat sağdan geliyor */}
+      {/* Arka plan (mobil): kare kesim — yat üstte, köpük izi sağ üste uzanıyor */}
+      <Image
+        src="/medya/sayfa-basligi-mobil.jpg"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover sm:hidden"
+      />
+      {/* Arka plan (masaüstü): 6628 kesimi — yat sağdan geliyor */}
       <Image
         src="/medya/sayfa-basligi.jpg"
         alt=""
         fill
         priority
         sizes="100vw"
-        className="object-cover object-[72%_center]"
+        className="hidden object-cover object-[72%_center] sm:block"
       />
       {/* Sol taraf metin için karartma, sağa doğru açılır */}
       <div className="absolute inset-0 bg-gradient-to-r from-navy-950/90 via-navy-950/55 to-navy-950/15" />
 
-      <div className="relative mx-auto max-w-6xl px-4 pb-14 pt-40">
+      <div className="relative mx-auto max-w-6xl px-4 pb-12 pt-56 sm:pb-14 sm:pt-40">
         <nav className="mb-3 flex flex-wrap items-center gap-1.5 text-xs text-navy-200">
           <Link href="/" className="hover:text-orange-400">
             Ana Sayfa

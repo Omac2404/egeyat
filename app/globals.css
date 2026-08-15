@@ -41,3 +41,27 @@
 body {
   @apply bg-white text-ink antialiased;
 }
+
+/* Hizmet kartları: hover'da renk değişimi yerine soldan sağa parlak bir ışık süpürmesi geçer */
+.card-shine {
+  position: relative;
+  overflow: hidden;
+}
+.card-shine::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 -60%;
+  width: 40%;
+  background: linear-gradient(
+    105deg,
+    transparent,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent
+  );
+  transform: translateX(0) skewX(-20deg);
+  pointer-events: none;
+}
+.card-shine:hover::before {
+  transform: translateX(450%) skewX(-20deg);
+  transition: transform 0.7s ease;
+}
