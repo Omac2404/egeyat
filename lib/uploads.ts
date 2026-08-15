@@ -2,7 +2,8 @@ import "server-only";
 import { mkdir, writeFile, unlink } from "fs/promises";
 import path from "path";
 
-// Panelden yüklenen dosyalar public/<subdir> altına yazılır.
+// Panelden yüklenen dosyalar public/uploads/<subdir> altına yazılır.
+// Tek klasör altında olmaları canlıda tek volume bağlamayı yeterli kılar.
 
 export const DOCUMENT_EXTENSIONS = new Set([
   "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx",
@@ -50,7 +51,7 @@ export async function saveUploadedFile(
   if (value.size > MAX_FILE_SIZE) {
     return { ok: false, error: "Dosya 20 MB'den büyük olamaz." };
   }
-  const dir = path.join(process.cwd(), "public", subdir);
+  const dir = path.join(process.cwd(), "public", "uploads", subdir);
   await mkdir(dir, { recursive: true });
   const base = slugifyFileName(value.name.replace(/\.[^.]+$/, "")) || "dosya";
   const fileName = `${base}-${Date.now().toString(36)}.${ext}`;
@@ -58,18 +59,30 @@ export async function saveUploadedFile(
     path.join(dir, fileName),
     Buffer.from(await value.arrayBuffer())
   );
-  return { ok: true, publicPath: `/${subdir}/${fileName}` };
+  return { ok: true, publicPath: `/uploads/${subdir}/${fileName}` };
 }
 
-// Yalnızca beklenen alt klasördeki dosyaları siler
+// Yalnızca beklenen alt klasördeki dosyaları siler.
+// Eski kayıtlar /<subdir>/, yeniler /uploads/<subdir>/ ile başlar; ikisi de desteklenir.
 export async function removeUploadedFile(
   publicPath: string | null | undefined,
   subdir: string
 ) {
-  if (!publicPath || !publicPath.startsWith(`/${subdir}/`)) return;
-  const fileName = path.basename(publicPath);
+  if (!publicPath) return;
+  let fullPath: string;
+  if (publicPath.startsWith(`/uploads/${subdir}/`)) {
+    fullPath = path.join(
+      process.cwd(), "public", "uploads", subdir, path.basename(publicPath)
+    );
+  } else if (publicPath.startsWith(`/${subdir}/`)) {
+    fullPath = path.join(
+      process.cwd(), "public", subdir, path.basename(publicPath)
+    );
+  } else {
+    return;
+  }
   try {
-    await unlink(path.join(process.cwd(), "public", subdir, fileName));
+    await unlink(fullPath);
   } catch {
     // Dosya zaten yoksa sorun değil
   }

@@ -35,19 +35,12 @@ NEXT_PUBLIC_SITE_URL=https://www.egeyatcilik.com
 
 ## 4. Kalıcı depolama (App > Mounts)
 
-Panelden yüklenen dosyalar `public/` altına yazılır; volume bağlanmazsa her
-dağıtımda silinir. Şu klasörlerin her biri için birer **Volume Mount** ekle
-(mount yolu `/app/...` ile başlar):
+Panelden yüklenen tüm dosyalar `public/uploads/` altına yazılır; volume
+bağlanmazsa her dağıtımda silinir. Tek bir **Volume Mount** yeterli:
 
-| Volume adı        | Mount yolu                      |
-| ----------------- | ------------------------------- |
-| belgeler          | /app/public/belgeler            |
-| genel             | /app/public/genel               |
-| bayraklar         | /app/public/bayraklar           |
-| referanslar       | /app/public/referanslar         |
-| teknik            | /app/public/teknik              |
-| yasal             | /app/public/yasal               |
-| hizmet-gorselleri | /app/public/hizmet-gorselleri   |
+| Volume adı | Mount yolu          |
+| ---------- | ------------------- |
+| uploads    | /app/public/uploads |
 
 ## 5. İlk açılış (tek seferlik)
 
