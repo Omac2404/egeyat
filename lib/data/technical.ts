@@ -10,11 +10,19 @@ import {
 const KEY = "teknik";
 
 export async function getTechnicalSettings(): Promise<TechnicalSettings> {
-  const rows = await db
-    .select()
-    .from(siteSettings)
-    .where(eq(siteSettings.key, KEY))
-    .limit(1);
+  let rows;
+  try {
+    rows = await db
+      .select()
+      .from(siteSettings)
+      .where(eq(siteSettings.key, KEY))
+      .limit(1);
+  } catch (err) {
+    // Build sırasında (statik sayfa üretimi) veritabanına erişilemez;
+    // varsayılanlarla devam edilir, çalışma anında gerçek değerler okunur.
+    console.warn("Teknik ayarlar okunamadı, varsayılanlar kullanılıyor:", err);
+    return defaultTechnicalSettings;
+  }
   if (!rows[0]) return defaultTechnicalSettings;
   const stored = rows[0].value as Partial<TechnicalSettings>;
   return {
