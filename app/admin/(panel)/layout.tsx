@@ -3,6 +3,7 @@ import Image from "next/image";
 import { requireUser, canAccess, ADMIN_SECTIONS } from "@/lib/auth/session";
 import { logout } from "@/app/actions/auth";
 import { Icon } from "@/components/site/Icon";
+import { AdminNav } from "@/components/admin/AdminNav";
 
 const sectionIcons = {
   genel: "home",
@@ -42,16 +43,7 @@ export default async function AdminLayout({
           </Link>
         </div>
         <nav className="flex flex-1 flex-col gap-1 p-3 text-sm">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-navy-900 hover:bg-navy-50"
-            >
-              <Icon name={item.icon} className="size-4 text-navy-400" />
-              {item.label}
-            </Link>
-          ))}
+          <AdminNav items={navItems} />
           <a
             href="/"
             target="_blank"

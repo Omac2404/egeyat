@@ -113,6 +113,7 @@ export async function saveService(
     .filter((f): f is File => f instanceof File && f.size > 0 && !!f.name);
 
   let slug: string;
+  let savedId: number;
   if (id) {
     const rows = await db
       .select({ slug: services.slug, images: services.images })
@@ -121,6 +122,7 @@ export async function saveService(
       .limit(1);
     if (!rows[0]) return { error: "Hizmet bulunamadı." };
     slug = rows[0].slug;
+    savedId = id;
 
     // Yalnızca gerçekten bu hizmete ait yollar tutulabilir
     const kept = rows[0].images.filter((p) => keepImages.includes(p));
@@ -164,17 +166,22 @@ export async function saveService(
     const maxRow = await db
       .select({ max: sql<number>`coalesce(max(${services.sortOrder}), -1)` })
       .from(services);
-    await db.insert(services).values({
-      slug,
-      sections,
-      images: uploaded,
-      sortOrder: (maxRow[0]?.max ?? -1) + 1,
-      ...fields,
-    });
+    const inserted = await db
+      .insert(services)
+      .values({
+        slug,
+        sections,
+        images: uploaded,
+        sortOrder: (maxRow[0]?.max ?? -1) + 1,
+        ...fields,
+      })
+      .returning({ id: services.id });
+    savedId = inserted[0].id;
   }
 
   revalidateService(slug);
-  redirect("/admin/hizmetler?kaydedildi=1");
+  // Kayıttan sonra listeye dönmek yerine düzenleme sayfasında kalınır
+  redirect(`/admin/hizmetler/${savedId}?kaydedildi=1`);
 }
 
 export async function deleteService(formData: FormData) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useActionState } from "react";
 import Link from "next/link";
 import type { ServiceSection } from "@/lib/content/services";
@@ -54,7 +54,40 @@ export function ServiceForm({ initial }: { initial?: Initial }) {
   >(saveService, {});
   // Mevcut görsellerden formda tutulmaya devam edenler
   const [keptImages, setKeptImages] = useState<string[]>(init.images ?? []);
-  const [imageError, setImageError] = useState("");
+  // Yeni seçilen görseller: dosyalar gizli inputlarda durur, burada önizlemeleri tutulur
+  const fileInput0 = useRef<HTMLInputElement>(null);
+  const fileInput1 = useRef<HTMLInputElement>(null);
+  const fileInput2 = useRef<HTMLInputElement>(null);
+  const fileInputs = [fileInput0, fileInput1, fileInput2];
+  const [newImages, setNewImages] = useState<
+    { slot: number; url: string; name: string }[]
+  >([]);
+  const totalImages = keptImages.length + newImages.length;
+
+  const pickImage = () => {
+    const free = [0, 1, 2].find(
+      (i) => !newImages.some((n) => n.slot === i)
+    );
+    if (free !== undefined) fileInputs[free].current?.click();
+  };
+
+  const onImagePicked = (slot: number, file: File | undefined) => {
+    if (!file) return;
+    setNewImages((prev) => [
+      ...prev.filter((n) => n.slot !== slot),
+      { slot, url: URL.createObjectURL(file), name: file.name },
+    ]);
+  };
+
+  const removeNewImage = (slot: number) => {
+    const input = fileInputs[slot].current;
+    if (input) input.value = "";
+    setNewImages((prev) => {
+      const item = prev.find((n) => n.slot === slot);
+      if (item) URL.revokeObjectURL(item.url);
+      return prev.filter((n) => n.slot !== slot);
+    });
+  };
   // Sürükle-bırak: taşınan madde ve üzerinde durulan hedef
   const [drag, setDrag] = useState<{ sec: number; idx: number } | null>(null);
   const [dragOver, setDragOver] = useState<{ sec: number; idx: number } | null>(
@@ -139,71 +172,87 @@ export function ServiceForm({ initial }: { initial?: Initial }) {
       </label>
       </div>
 
-      {/* Hizmet görselleri kartı (en fazla 3, sitede slider olarak döner) */}
+      {/* Hizmet görselleri kartı (en fazla 3 slot, sitede slider olarak döner) */}
       <div className="space-y-3 rounded-2xl border border-line bg-white p-5">
         <p className="text-sm font-bold text-navy-900">
           Hizmet Görselleri{" "}
           <span className="font-medium text-navy-400">
-            ({keptImages.length}/{MAX_IMAGES})
+            ({totalImages}/{MAX_IMAGES})
           </span>
         </p>
         <input type="hidden" name="keepImages" value={JSON.stringify(keptImages)} />
-        {keptImages.length > 0 ? (
-          <div className="space-y-2.5">
-            {keptImages.map((img) => (
-              <div key={img} className="relative">
+        {/* Dosyalar bu gizli inputlarda taşınır; kaydete basınca yüklenir */}
+        {fileInputs.map((ref, i) => (
+          <input
+            key={i}
+            ref={ref}
+            type="file"
+            name="images"
+            accept=".png,.jpg,.jpeg,.webp,.svg"
+            className="hidden"
+            onChange={(e) => onImagePicked(i, e.target.files?.[0])}
+          />
+        ))}
+        <div className="grid grid-cols-3 gap-2.5">
+          {keptImages.map((img) => (
+            <div key={img} className="relative">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={img}
+                alt="Hizmet görseli"
+                className="aspect-square w-full rounded-xl border border-line object-cover"
+              />
+              <button
+                type="button"
+                onClick={() =>
+                  setKeptImages((prev) => prev.filter((p) => p !== img))
+                }
+                title="Görseli kaldır"
+                className="absolute right-1 top-1 flex size-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white shadow transition hover:bg-red-700"
+              >
+                ×
+              </button>
+            </div>
+          ))}
+          {newImages
+            .slice()
+            .sort((a, b) => a.slot - b.slot)
+            .map((n) => (
+              <div key={n.slot} className="relative">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={img}
-                  alt="Hizmet görseli"
-                  className="aspect-[4/3] w-full rounded-xl border border-line object-cover"
+                  src={n.url}
+                  alt={n.name}
+                  title={n.name}
+                  className="aspect-square w-full rounded-xl border-2 border-dashed border-orange-300 object-cover"
                 />
+                <span className="absolute bottom-1 left-1 rounded bg-orange-600/90 px-1.5 py-0.5 text-[10px] font-bold text-white">
+                  Yeni
+                </span>
                 <button
                   type="button"
-                  onClick={() =>
-                    setKeptImages((prev) => prev.filter((p) => p !== img))
-                  }
-                  className="absolute right-2 top-2 rounded-lg border border-red-200 bg-white/90 px-2.5 py-1 text-xs font-semibold text-red-600 shadow-sm transition hover:bg-red-50"
+                  onClick={() => removeNewImage(n.slot)}
+                  title="Görseli kaldır"
+                  className="absolute right-1 top-1 flex size-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white shadow transition hover:bg-red-700"
                 >
-                  Kaldır
+                  ×
                 </button>
               </div>
             ))}
-          </div>
-        ) : (
-          <div className="flex aspect-[4/3] w-full items-center justify-center rounded-xl border border-dashed border-line bg-navy-50/40 text-xs font-semibold text-navy-400">
-            Henüz görsel yok
-          </div>
-        )}
-        <input
-          type="file"
-          name="images"
-          multiple
-          accept=".png,.jpg,.jpeg,.webp,.svg"
-          onChange={(e) => {
-            const count = e.target.files?.length ?? 0;
-            if (keptImages.length + count > MAX_IMAGES) {
-              setImageError(
-                `En fazla ${MAX_IMAGES} görsel olabilir. ${
-                  MAX_IMAGES - keptImages.length > 0
-                    ? `${MAX_IMAGES - keptImages.length} görsel daha seçebilirsiniz.`
-                    : "Yenisini eklemek için önce mevcut bir görseli kaldırın."
-                }`
-              );
-              e.target.value = "";
-            } else {
-              setImageError("");
-            }
-          }}
-          className={`${inputCls} file:mr-3 file:rounded-md file:border-0 file:bg-navy-100 file:px-3 file:py-1 file:text-xs file:font-semibold file:text-navy-700`}
-        />
-        {imageError && (
-          <p className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">
-            {imageError}
-          </p>
-        )}
+          {totalImages < MAX_IMAGES && (
+            <button
+              type="button"
+              onClick={pickImage}
+              className="flex aspect-square w-full flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-line bg-navy-50/40 text-navy-400 transition hover:border-orange-400 hover:text-orange-600"
+            >
+              <span className="text-xl leading-none">+</span>
+              <span className="text-[10px] font-semibold">Görsel Ekle</span>
+            </button>
+          )}
+        </div>
         <p className="text-xs text-navy-400">
-          Birden fazla görsel seçebilirsiniz; sitede slider olarak gösterilir.
+          En fazla {MAX_IMAGES} görsel; &quot;Yeni&quot; etiketli görseller
+          kaydete basınca yüklenir. Sitede slider olarak gösterilir.
         </p>
       </div>
       </div>

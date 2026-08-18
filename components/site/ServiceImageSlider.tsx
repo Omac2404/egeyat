@@ -21,7 +21,7 @@ export function ServiceImageSlider({
     if (count < 2 || paused) return;
     const timer = setInterval(
       () => setIndex((i) => (i + 1) % count),
-      5000
+      4000
     );
     return () => clearInterval(timer);
   }, [count, paused]);

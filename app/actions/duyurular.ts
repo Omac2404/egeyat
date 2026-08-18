@@ -90,6 +90,7 @@ export async function saveAnnouncement(
   const { id, title, date, summary, published, blocks } = parsed.data;
 
   let slug: string;
+  let savedId: number;
   if (id) {
     const rows = await db
       .select({ slug: announcements.slug })
@@ -98,21 +99,26 @@ export async function saveAnnouncement(
       .limit(1);
     if (!rows[0]) return { error: "Duyuru bulunamadı." };
     slug = rows[0].slug;
+    savedId = id;
     await db
       .update(announcements)
       .set({ title, date, summary, published, blocks, updatedAt: new Date() })
       .where(eq(announcements.id, id));
   } else {
     slug = await uniqueSlug(slugify(title));
-    await db
+    const inserted = await db
       .insert(announcements)
-      .values({ slug, title, date, summary, published, blocks });
+      .values({ slug, title, date, summary, published, blocks })
+      .returning({ id: announcements.id });
+    savedId = inserted[0].id;
   }
 
   revalidatePath("/");
   revalidatePath("/duyurular");
   revalidatePath(`/duyurular/${slug}`);
-  redirect("/admin/duyurular?kaydedildi=1");
+  revalidatePath("/admin/duyurular");
+  // Kayıttan sonra listeye dönmek yerine düzenleme sayfasında kalınır
+  redirect(`/admin/duyurular/${savedId}?kaydedildi=1`);
 }
 
 export async function deleteAnnouncement(formData: FormData) {
