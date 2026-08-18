@@ -14,6 +14,7 @@ import {
 } from "@/lib/uploads";
 
 const IMAGE_DIR = "hizmet-gorselleri";
+const MAX_IMAGES = 3;
 
 const sectionSchema = z.object({
   title: z.string().trim(),
@@ -97,38 +98,68 @@ export async function saveService(
   }
   const { id, sections, ...fields } = parsed.data;
 
-  const upload = await saveUploadedFile(
-    formData.get("image"),
-    IMAGE_DIR,
-    IMAGE_EXTENSIONS
-  );
-  if (!upload.ok) return { error: upload.error };
-  const removeImage = formData.get("removeImage") === "on";
+  // Formda tutulmaya devam eden mevcut görseller
+  let keepImages: string[];
+  try {
+    const raw = JSON.parse(String(formData.get("keepImages") ?? "[]"));
+    keepImages = Array.isArray(raw) ? raw.filter((p) => typeof p === "string") : [];
+  } catch {
+    return { error: "Görsel listesi okunamadı." };
+  }
+
+  // Yeni yüklenen dosyalar (birden fazla seçilebilir)
+  const newFiles = formData
+    .getAll("images")
+    .filter((f): f is File => f instanceof File && f.size > 0 && !!f.name);
 
   let slug: string;
   if (id) {
     const rows = await db
-      .select({ slug: services.slug, image: services.image })
+      .select({ slug: services.slug, images: services.images })
       .from(services)
       .where(eq(services.id, id))
       .limit(1);
     if (!rows[0]) return { error: "Hizmet bulunamadı." };
     slug = rows[0].slug;
 
-    let image = rows[0].image;
-    if (upload.publicPath) {
-      await removeUploadedFile(image, IMAGE_DIR);
-      image = upload.publicPath;
-    } else if (removeImage) {
-      await removeUploadedFile(image, IMAGE_DIR);
-      image = null;
+    // Yalnızca gerçekten bu hizmete ait yollar tutulabilir
+    const kept = rows[0].images.filter((p) => keepImages.includes(p));
+    if (kept.length + newFiles.length > MAX_IMAGES) {
+      return { error: `En fazla ${MAX_IMAGES} görsel eklenebilir.` };
+    }
+
+    const uploaded: string[] = [];
+    for (const file of newFiles) {
+      const upload = await saveUploadedFile(file, IMAGE_DIR, IMAGE_EXTENSIONS);
+      if (!upload.ok) return { error: upload.error };
+      if (upload.publicPath) uploaded.push(upload.publicPath);
+    }
+
+    // Formdan kaldırılan görsellerin dosyalarını sil
+    for (const p of rows[0].images) {
+      if (!kept.includes(p)) await removeUploadedFile(p, IMAGE_DIR);
     }
 
     await db
       .update(services)
-      .set({ ...fields, sections, image, updatedAt: new Date() })
+      .set({
+        ...fields,
+        sections,
+        images: [...kept, ...uploaded],
+        updatedAt: new Date(),
+      })
       .where(eq(services.id, id));
   } else {
+    if (newFiles.length > MAX_IMAGES) {
+      return { error: `En fazla ${MAX_IMAGES} görsel eklenebilir.` };
+    }
+    const uploaded: string[] = [];
+    for (const file of newFiles) {
+      const upload = await saveUploadedFile(file, IMAGE_DIR, IMAGE_EXTENSIONS);
+      if (!upload.ok) return { error: upload.error };
+      if (upload.publicPath) uploaded.push(upload.publicPath);
+    }
+
     slug = await uniqueSlug(slugify(fields.title));
     const maxRow = await db
       .select({ max: sql<number>`coalesce(max(${services.sortOrder}), -1)` })
@@ -136,7 +167,7 @@ export async function saveService(
     await db.insert(services).values({
       slug,
       sections,
-      image: upload.publicPath,
+      images: uploaded,
       sortOrder: (maxRow[0]?.max ?? -1) + 1,
       ...fields,
     });
@@ -151,11 +182,13 @@ export async function deleteService(formData: FormData) {
   const id = Number(formData.get("id"));
   if (!Number.isInteger(id)) return;
   const rows = await db
-    .select({ slug: services.slug, image: services.image })
+    .select({ slug: services.slug, images: services.images })
     .from(services)
     .where(eq(services.id, id))
     .limit(1);
-  await removeUploadedFile(rows[0]?.image, IMAGE_DIR);
+  for (const p of rows[0]?.images ?? []) {
+    await removeUploadedFile(p, IMAGE_DIR);
+  }
   await db.delete(services).where(eq(services.id, id));
   revalidateService(rows[0]?.slug ?? "");
 }

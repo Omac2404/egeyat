@@ -12,10 +12,12 @@ type Initial = {
   shortTitle: string;
   summary: string;
   intro: string;
-  image?: string | null;
+  images?: string[];
   published: boolean;
   sections: ServiceSection[];
 };
+
+const MAX_IMAGES = 3;
 
 type EditableSection = {
   title: string;
@@ -50,6 +52,9 @@ export function ServiceForm({ initial }: { initial?: Initial }) {
     SaveServiceState,
     FormData
   >(saveService, {});
+  // Mevcut görsellerden formda tutulmaya devam edenler
+  const [keptImages, setKeptImages] = useState<string[]>(init.images ?? []);
+  const [imageError, setImageError] = useState("");
   // Sürükle-bırak: taşınan madde ve üzerinde durulan hedef
   const [drag, setDrag] = useState<{ sec: number; idx: number } | null>(null);
   const [dragOver, setDragOver] = useState<{ sec: number; idx: number } | null>(
@@ -134,26 +139,37 @@ export function ServiceForm({ initial }: { initial?: Initial }) {
       </label>
       </div>
 
-      {/* Hizmet görseli kartı */}
+      {/* Hizmet görselleri kartı (en fazla 3, sitede slider olarak döner) */}
       <div className="space-y-3 rounded-2xl border border-line bg-white p-5">
-        <p className="text-sm font-bold text-navy-900">Hizmet Görseli</p>
-        {init.image ? (
-          <>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={init.image}
-              alt="Mevcut hizmet görseli"
-              className="aspect-[4/3] w-full rounded-xl border border-line object-cover"
-            />
-            <label className="flex items-center gap-1.5 text-xs font-medium text-red-600">
-              <input
-                type="checkbox"
-                name="removeImage"
-                className="size-3.5 accent-red-600"
-              />
-              Görseli kaldır
-            </label>
-          </>
+        <p className="text-sm font-bold text-navy-900">
+          Hizmet Görselleri{" "}
+          <span className="font-medium text-navy-400">
+            ({keptImages.length}/{MAX_IMAGES})
+          </span>
+        </p>
+        <input type="hidden" name="keepImages" value={JSON.stringify(keptImages)} />
+        {keptImages.length > 0 ? (
+          <div className="space-y-2.5">
+            {keptImages.map((img) => (
+              <div key={img} className="relative">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={img}
+                  alt="Hizmet görseli"
+                  className="aspect-[4/3] w-full rounded-xl border border-line object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setKeptImages((prev) => prev.filter((p) => p !== img))
+                  }
+                  className="absolute right-2 top-2 rounded-lg border border-red-200 bg-white/90 px-2.5 py-1 text-xs font-semibold text-red-600 shadow-sm transition hover:bg-red-50"
+                >
+                  Kaldır
+                </button>
+              </div>
+            ))}
+          </div>
         ) : (
           <div className="flex aspect-[4/3] w-full items-center justify-center rounded-xl border border-dashed border-line bg-navy-50/40 text-xs font-semibold text-navy-400">
             Henüz görsel yok
@@ -161,10 +177,34 @@ export function ServiceForm({ initial }: { initial?: Initial }) {
         )}
         <input
           type="file"
-          name="image"
+          name="images"
+          multiple
           accept=".png,.jpg,.jpeg,.webp,.svg"
+          onChange={(e) => {
+            const count = e.target.files?.length ?? 0;
+            if (keptImages.length + count > MAX_IMAGES) {
+              setImageError(
+                `En fazla ${MAX_IMAGES} görsel olabilir. ${
+                  MAX_IMAGES - keptImages.length > 0
+                    ? `${MAX_IMAGES - keptImages.length} görsel daha seçebilirsiniz.`
+                    : "Yenisini eklemek için önce mevcut bir görseli kaldırın."
+                }`
+              );
+              e.target.value = "";
+            } else {
+              setImageError("");
+            }
+          }}
           className={`${inputCls} file:mr-3 file:rounded-md file:border-0 file:bg-navy-100 file:px-3 file:py-1 file:text-xs file:font-semibold file:text-navy-700`}
         />
+        {imageError && (
+          <p className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">
+            {imageError}
+          </p>
+        )}
+        <p className="text-xs text-navy-400">
+          Birden fazla görsel seçebilirsiniz; sitede slider olarak gösterilir.
+        </p>
       </div>
       </div>
 

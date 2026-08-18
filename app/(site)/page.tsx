@@ -10,6 +10,7 @@ import { ServiceCard } from "@/components/site/ServiceCard";
 import { MediaPlaceholder } from "@/components/site/MediaPlaceholder";
 import { HeroVideo } from "@/components/site/HeroVideo";
 import { FlagSlider } from "@/components/site/FlagSlider";
+import { AnnouncementSlider } from "@/components/site/AnnouncementSlider";
 
 export const dynamic = "force-dynamic";
 
@@ -53,12 +54,13 @@ function SmartLink({
 export default async function HomePage() {
   const general = await getGeneralSettings();
   const services = await getPublishedServices();
+  // En az 3 duyuru varsa kayan şerit olarak, daha azsa sabit kartlar olarak gösterilir
   const latest = await db
     .select()
     .from(announcements)
     .where(eq(announcements.published, true))
     .orderBy(desc(announcements.date), desc(announcements.id))
-    .limit(3);
+    .limit(10);
 
   return (
     <>
@@ -141,25 +143,29 @@ export default async function HomePage() {
               <Icon name="arrow" className="size-4" />
             </Link>
           </div>
-          <div className="grid gap-5 md:grid-cols-3">
-            {latest.map((a) => (
-              <Link
-                key={a.slug}
-                href={`/duyurular/${a.slug}`}
-                className="group rounded-2xl border border-navy-900 bg-white p-6 shadow-sm transition hover:shadow-md"
-              >
-                <p className="text-xs font-semibold uppercase tracking-wider text-orange-600">
-                  {formatDate(a.date)}
-                </p>
-                <h3 className="mt-2 font-bold leading-snug text-navy-900 group-hover:text-orange-700">
-                  {a.title}
-                </h3>
-                <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted">
-                  {a.summary}
-                </p>
-              </Link>
-            ))}
-          </div>
+          {latest.length >= 3 ? (
+            <AnnouncementSlider items={latest} />
+          ) : (
+            <div className="grid gap-5 md:grid-cols-3">
+              {latest.map((a) => (
+                <Link
+                  key={a.slug}
+                  href={`/duyurular/${a.slug}`}
+                  className="group rounded-2xl border border-navy-900 bg-white p-6 shadow-sm transition hover:shadow-md"
+                >
+                  <p className="text-xs font-semibold uppercase tracking-wider text-orange-600">
+                    {formatDate(a.date)}
+                  </p>
+                  <h3 className="mt-2 font-bold leading-snug text-navy-900 group-hover:text-orange-700">
+                    {a.title}
+                  </h3>
+                  <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted">
+                    {a.summary}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

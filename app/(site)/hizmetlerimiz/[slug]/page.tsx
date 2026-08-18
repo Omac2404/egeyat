@@ -7,6 +7,7 @@ import { services as servicesTable } from "@/db/schema";
 import { getPublishedServices } from "@/lib/data/services";
 import { PageHero } from "@/components/site/PageHero";
 import { MediaPlaceholder } from "@/components/site/MediaPlaceholder";
+import { ServiceImageSlider } from "@/components/site/ServiceImageSlider";
 import { Icon } from "@/components/site/Icon";
 import { site } from "@/lib/site";
 
@@ -54,6 +55,12 @@ export default async function ServiceDetailPage({
       />
 
       <section className="mx-auto grid max-w-6xl items-start gap-10 px-4 py-16 lg:grid-cols-3">
+        {/* Mobilde görseller metnin üstünde, geniş ekranda sağ sütunda */}
+        {service.images.length > 0 && (
+          <div className="lg:hidden">
+            <ServiceImageSlider images={service.images} title={service.title} />
+          </div>
+        )}
         <div className="lg:col-span-2">
           <p className="leading-relaxed text-muted">{service.intro}</p>
 
@@ -97,13 +104,13 @@ export default async function ServiceDetailPage({
         </div>
 
         <aside className="space-y-5">
-          {service.image ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={service.image}
-              alt={service.title}
-              className="aspect-[4/3] w-full rounded-2xl border border-line object-cover shadow-sm"
-            />
+          {service.images.length > 0 ? (
+            <div className="hidden lg:block">
+              <ServiceImageSlider
+                images={service.images}
+                title={service.title}
+              />
+            </div>
           ) : (
             <MediaPlaceholder
               kind="image"

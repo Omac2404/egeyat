@@ -33,7 +33,7 @@ export default async function EditServicePage({
             shortTitle: item.shortTitle,
             summary: item.summary,
             intro: item.intro,
-            image: item.image,
+            images: item.images,
             published: item.published,
             sections: item.sections,
           }}

@@ -92,8 +92,8 @@ export const services = pgTable("services", {
   icon: text("icon").$type<Service["icon"]>().notNull().default("anchor"),
   summary: text("summary").notNull().default(""),
   intro: text("intro").notNull().default(""),
-  // Detay sayfasındaki hizmet görseli (public/hizmet-gorselleri), null → yer tutucu
-  image: text("image"),
+  // Detay sayfasındaki hizmet görselleri (en fazla 3, slider), boş → yer tutucu
+  images: jsonb("images").$type<string[]>().notNull().default([]),
   sections: jsonb("sections").$type<ServiceSection[]>().notNull().default([]),
   sortOrder: integer("sort_order").notNull().default(0),
   published: boolean("published").notNull().default(true),

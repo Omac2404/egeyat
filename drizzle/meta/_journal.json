@@ -50,6 +50,20 @@
       "when": 1786720875200,
       "tag": "0006_nappy_maverick",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1787054713420,
+      "tag": "0007_even_doctor_doom",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1787054732727,
+      "tag": "0008_illegal_lady_vermin",
+      "breakpoints": true
     }
   ]
 }
