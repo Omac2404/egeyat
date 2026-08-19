@@ -1,14 +1,15 @@
 import type { MetadataRoute } from "next";
 import { getTechnicalSettings } from "@/lib/data/technical";
+import { getSiteUrl } from "@/lib/site-url";
 
 // Ayar panelden değişebildiği için her istekte DB'den okunur
 export const dynamic = "force-dynamic";
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
-  const base = (
-    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
-  ).replace(/\/$/, "");
-  const technical = await getTechnicalSettings();
+  const [base, technical] = await Promise.all([
+    getSiteUrl(),
+    getTechnicalSettings(),
+  ]);
 
   // İndekslemeye kapalıyken tüm site engellenir, sitemap verilmez
   if (technical.noindex) {
