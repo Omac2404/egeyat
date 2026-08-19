@@ -150,6 +150,19 @@ export async function saveSeo(
   return { ok: true };
 }
 
+export async function saveIndexing(
+  _prev: TechnicalState,
+  formData: FormData
+): Promise<TechnicalState> {
+  await requireSection("teknik");
+  const noindex = formData.get("noindex") === "on";
+  const current = await getTechnicalSettings();
+  await saveTechnicalSettingsToDb({ ...current, noindex });
+  revalidateTechnical();
+  revalidatePath("/robots.txt");
+  return { ok: true };
+}
+
 const sitemapSchema = z.array(
   z
     .string()

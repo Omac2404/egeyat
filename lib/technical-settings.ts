@@ -18,6 +18,8 @@ export type TechnicalSettings = {
     title: string;
     description: string;
   };
+  // true → arama motorlarına kapalı: noindex meta + robots.txt engeli (demo yayını için)
+  noindex: boolean;
   // Sitemap'e eklenecek sabit yollar (hizmet ve duyuru sayfaları otomatik eklenir)
   sitemap: string[];
 };
@@ -27,6 +29,7 @@ export const defaultTechnicalSettings: TechnicalSettings = {
   smtp: { host: "", port: 587, user: "", pass: "", from: "" },
   mailTo: "",
   favicon: null,
+  noindex: false,
   seo: {
     title: "Ege Yatçılık | Gemi Acenteliği & Müşavirlik",
     description:

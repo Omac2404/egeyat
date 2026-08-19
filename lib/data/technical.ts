@@ -31,6 +31,7 @@ export async function getTechnicalSettings(): Promise<TechnicalSettings> {
     mailTo: stored.mailTo ?? defaultTechnicalSettings.mailTo,
     favicon: stored.favicon ?? defaultTechnicalSettings.favicon,
     seo: { ...defaultTechnicalSettings.seo, ...stored.seo },
+    noindex: stored.noindex ?? defaultTechnicalSettings.noindex,
     sitemap: stored.sitemap ?? defaultTechnicalSettings.sitemap,
   };
 }

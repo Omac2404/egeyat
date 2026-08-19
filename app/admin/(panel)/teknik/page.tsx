@@ -8,6 +8,7 @@ import {
   SmtpTestForm,
   FaviconForm,
   SeoForm,
+  IndexingForm,
   SitemapForm,
 } from "@/components/admin/TechnicalForms";
 import { UserCreateForm } from "@/components/admin/UserCreateForm";
@@ -74,6 +75,16 @@ export default async function AdminTechnicalPage() {
             Google Görünümü
           </h2>
           <SeoForm initial={settings.seo} />
+        </section>
+
+        <section>
+          <h2 className="mb-3 text-lg font-bold text-navy-900">
+            İndeksleme
+          </h2>
+          <IndexingForm
+            key={String(settings.noindex)}
+            initial={settings.noindex}
+          />
         </section>
 
         <section>

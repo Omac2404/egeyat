@@ -8,6 +8,7 @@ import {
   saveSmtp,
   saveFavicon,
   saveSeo,
+  saveIndexing,
   saveSitemap,
   sendSmtpTest,
   type TechnicalState,
@@ -297,6 +298,47 @@ export function SeoForm({ initial }: { initial: TechnicalSettings["seo"] }) {
         </div>
       </div>
 
+      <FormStatus state={state} pending={pending} />
+    </form>
+  );
+}
+
+// Arama motoru indeksleme anahtarı: demo yayınında site Google'a kapatılır
+export function IndexingForm({ initial }: { initial: boolean }) {
+  const [noindex, setNoindex] = useState(initial);
+  const [state, formAction, pending] = useActionState<TechnicalState, FormData>(
+    saveIndexing,
+    {}
+  );
+  return (
+    <form
+      action={formAction}
+      className="space-y-4 rounded-2xl border border-line bg-white p-5"
+    >
+      <label className="flex items-start gap-3 text-sm text-navy-900">
+        <input
+          type="checkbox"
+          name="noindex"
+          checked={noindex}
+          onChange={(e) => setNoindex(e.target.checked)}
+          className="mt-0.5 size-4 accent-orange-600"
+        />
+        <span>
+          <span className="font-semibold">
+            Siteyi arama motorlarına kapat (indeksleme)
+          </span>
+          <span className="mt-1 block text-xs text-muted">
+            İşaretliyken tüm sayfalara noindex etiketi eklenir ve robots.txt
+            arama motorlarını engeller. Demo alan adında yayındayken açık
+            tutun; gerçek alan adına geçince tiki kaldırıp kaydedin.
+          </span>
+        </span>
+      </label>
+      {noindex && (
+        <p className="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">
+          Site şu anda arama motorlarına kapalı. Google sonuçlarında görünmez.
+        </p>
+      )}
       <FormStatus state={state} pending={pending} />
     </form>
   );

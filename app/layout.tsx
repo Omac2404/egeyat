@@ -19,6 +19,10 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description: technical.seo.description,
     ...(technical.favicon ? { icons: { icon: technical.favicon } } : {}),
+    // Panelden "indekslemeye kapat" işaretliyse tüm sayfalara noindex eklenir
+    ...(technical.noindex
+      ? { robots: { index: false, follow: false } }
+      : {}),
   };
 }
 
