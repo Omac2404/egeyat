@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getContactSettings } from "@/lib/data/contact";
+import { getTechnicalSettings } from "@/lib/data/technical";
 import { lineHref } from "@/lib/contact-settings";
 import { PageHero } from "@/components/site/PageHero";
 import { Icon } from "@/components/site/Icon";
@@ -11,8 +12,13 @@ export const metadata: Metadata = {
     "Ege Yatçılık İzmir merkez ve Çeşme irtibat ofisi iletişim bilgileri.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function ContactPage() {
-  const settings = await getContactSettings();
+  const [settings, technical] = await Promise.all([
+    getContactSettings(),
+    getTechnicalSettings(),
+  ]);
 
   return (
     <>
@@ -83,7 +89,7 @@ export default async function ContactPage() {
             <p className="mb-6 mt-1 text-sm text-muted">
               Formu doldurun, işleminizle ilgili size dönüş yapalım.
             </p>
-            <ContactForm />
+            <ContactForm recaptchaSiteKey={technical.recaptcha.siteKey} />
           </div>
         </div>
       </section>

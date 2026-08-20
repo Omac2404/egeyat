@@ -6,6 +6,7 @@ import type { TechnicalSettings } from "@/lib/technical-settings";
 import {
   saveHeadCode,
   saveSmtp,
+  saveRecaptcha,
   saveFavicon,
   saveSeo,
   saveIndexing,
@@ -195,6 +196,51 @@ export function SmtpTestForm({ defaultTo }: { defaultTo: string }) {
           {state.error}
         </p>
       )}
+    </form>
+  );
+}
+
+export function RecaptchaForm({
+  initial,
+}: {
+  initial: TechnicalSettings["recaptcha"];
+}) {
+  const [state, formAction, pending] = useActionState<TechnicalState, FormData>(
+    saveRecaptcha,
+    {}
+  );
+  return (
+    <form
+      action={formAction}
+      className="space-y-4 rounded-2xl border border-line bg-white p-5"
+    >
+      <p className="text-xs text-muted">
+        google.com/recaptcha adresinden <strong>reCAPTCHA v2 &rarr; &quot;Ben
+        robot değilim&quot; onay kutusu</strong> tipinde bir site kaydı açın ve
+        alan adlarınızı ekleyin. İki anahtar da doluyken iletişim formunda
+        doğrulama kutusu çıkar; alanları boşaltırsanız kutu kaldırılır.
+      </p>
+      <label className={labelCls}>
+        Site Anahtarı (Site Key)
+        <input
+          type="text"
+          name="siteKey"
+          defaultValue={initial.siteKey}
+          placeholder="6L..."
+          className={inputCls}
+        />
+      </label>
+      <label className={labelCls}>
+        Gizli Anahtar (Secret Key) — değiştirmeyeceksen boş bırak
+        <input
+          type="password"
+          name="secretKey"
+          placeholder={initial.secretKey ? "••••••••" : ""}
+          autoComplete="new-password"
+          className={inputCls}
+        />
+      </label>
+      <FormStatus state={state} pending={pending} />
     </form>
   );
 }

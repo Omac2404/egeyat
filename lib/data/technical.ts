@@ -29,6 +29,10 @@ export async function getTechnicalSettings(): Promise<TechnicalSettings> {
     headCode: stored.headCode ?? defaultTechnicalSettings.headCode,
     smtp: { ...defaultTechnicalSettings.smtp, ...stored.smtp },
     mailTo: stored.mailTo ?? defaultTechnicalSettings.mailTo,
+    recaptcha: {
+      ...defaultTechnicalSettings.recaptcha,
+      ...stored.recaptcha,
+    },
     favicon: stored.favicon ?? defaultTechnicalSettings.favicon,
     seo: { ...defaultTechnicalSettings.seo, ...stored.seo },
     noindex: stored.noindex ?? defaultTechnicalSettings.noindex,

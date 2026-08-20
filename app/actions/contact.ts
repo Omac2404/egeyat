@@ -5,6 +5,8 @@ import { z } from "zod";
 import { db } from "@/db";
 import { submissions } from "@/db/schema";
 import { checkRateLimit } from "@/lib/auth/rate-limit";
+import { getTechnicalSettings } from "@/lib/data/technical";
+import { verifyRecaptcha } from "@/lib/recaptcha";
 
 const contactSchema = z.object({
   name: z.string().trim().min(2, "Adınızı yazın").max(120),
@@ -41,6 +43,14 @@ export async function submitContact(
   const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
   if (!checkRateLimit(`contact:${ip}`)) {
     return { error: "Çok fazla gönderim yaptınız. Lütfen daha sonra deneyin." };
+  }
+
+  // reCAPTCHA yalnızca panelde iki anahtar da doluysa zorunlu olur
+  const { recaptcha } = await getTechnicalSettings();
+  if (recaptcha.siteKey && recaptcha.secretKey) {
+    const token = String(formData.get("g-recaptcha-response") ?? "");
+    const check = await verifyRecaptcha(token, recaptcha.secretKey, ip);
+    if (!check.ok) return { error: check.error };
   }
 
   const { name, email, phone, subject, message } = parsed.data;

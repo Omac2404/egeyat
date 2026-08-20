@@ -6,6 +6,7 @@ import {
   HeadCodeForm,
   SmtpForm,
   SmtpTestForm,
+  RecaptchaForm,
   FaviconForm,
   SeoForm,
   IndexingForm,
@@ -60,6 +61,13 @@ export default async function AdminTechnicalPage() {
           <SmtpTestForm
             defaultTo={settings.mailTo.split(",")[0]?.trim() ?? ""}
           />
+        </section>
+
+        <section>
+          <h2 className="mb-3 text-lg font-bold text-navy-900">
+            İletişim Formu Doğrulaması (reCAPTCHA)
+          </h2>
+          <RecaptchaForm initial={settings.recaptcha} />
         </section>
 
         <section>

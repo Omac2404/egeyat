@@ -1,16 +1,61 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
+import Script from "next/script";
 import { submitContact, type ContactState } from "@/app/actions/contact";
+
+declare global {
+  interface Window {
+    grecaptcha?: {
+      render: (
+        el: HTMLElement,
+        opts: { sitekey: string; hl?: string }
+      ) => number;
+      reset: (widgetId?: number) => void;
+      ready?: (cb: () => void) => void;
+    };
+  }
+}
 
 const inputCls =
   "w-full rounded-lg border border-line bg-white px-3.5 py-2.5 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-100";
 
-export function ContactForm() {
+export function ContactForm({
+  recaptchaSiteKey = "",
+}: {
+  recaptchaSiteKey?: string;
+}) {
   const [state, formAction, pending] = useActionState<ContactState, FormData>(
     submitContact,
     {}
   );
+  const captchaBox = useRef<HTMLDivElement>(null);
+  const widgetId = useRef<number | null>(null);
+  const [scriptReady, setScriptReady] = useState(false);
+
+  // Kutuyu yalnızca bir kez çiz; script yüklenmeden grecaptcha tanımlı değildir
+  useEffect(() => {
+    if (!recaptchaSiteKey || !scriptReady) return;
+    const g = window.grecaptcha;
+    if (!g?.render) return;
+    const draw = () => {
+      if (captchaBox.current && widgetId.current === null) {
+        widgetId.current = g.render(captchaBox.current, {
+          sitekey: recaptchaSiteKey,
+          hl: "tr",
+        });
+      }
+    };
+    if (typeof g.ready === "function") g.ready(draw);
+    else draw();
+  }, [recaptchaSiteKey, scriptReady]);
+
+  // Gönderim hatayla dönerse token tükenmiştir; kutuyu sıfırla
+  useEffect(() => {
+    if (state.error && widgetId.current !== null) {
+      window.grecaptcha?.reset(widgetId.current);
+    }
+  }, [state]);
 
   if (state.ok) {
     return (
@@ -88,6 +133,16 @@ export function ContactForm() {
           placeholder="İşleminizin detaylarını kısaca anlatın…"
         />
       </label>
+      {recaptchaSiteKey && (
+        <>
+          <Script
+            src="https://www.google.com/recaptcha/api.js?render=explicit&hl=tr"
+            strategy="afterInteractive"
+            onLoad={() => setScriptReady(true)}
+          />
+          <div ref={captchaBox} />
+        </>
+      )}
       {state.error && (
         <p className="rounded-lg bg-red-50 px-4 py-2.5 text-sm text-red-700">
           {state.error}

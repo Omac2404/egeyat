@@ -12,6 +12,11 @@ export type TechnicalSettings = {
   };
   // Formdan gelen e-postaların alıcıları (virgülle ayrılır)
   mailTo: string;
+  // Google reCAPTCHA v2 ("Ben robot değilim") — iki anahtar da doluysa devreye girer
+  recaptcha: {
+    siteKey: string;
+    secretKey: string;
+  };
   // public/teknik altındaki favicon yolu, null → varsayılan ikon
   favicon: string | null;
   seo: {
@@ -28,6 +33,7 @@ export const defaultTechnicalSettings: TechnicalSettings = {
   headCode: "",
   smtp: { host: "", port: 587, user: "", pass: "", from: "" },
   mailTo: "",
+  recaptcha: { siteKey: "", secretKey: "" },
   favicon: null,
   noindex: false,
   seo: {

@@ -68,6 +68,37 @@ export async function saveSmtp(
   return { ok: true };
 }
 
+const recaptchaSchema = z.object({
+  siteKey: z.string().trim(),
+  secretKey: z.string(),
+});
+
+export async function saveRecaptcha(
+  _prev: TechnicalState,
+  formData: FormData
+): Promise<TechnicalState> {
+  await requireSection("teknik");
+  const parsed = recaptchaSchema.safeParse({
+    siteKey: formData.get("siteKey") ?? "",
+    secretKey: formData.get("secretKey") ?? "",
+  });
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Formu kontrol edin." };
+  }
+  const current = await getTechnicalSettings();
+  // Gizli anahtar boş bırakıldıysa mevcut değer korunur
+  const secretKey =
+    parsed.data.secretKey === ""
+      ? current.recaptcha.secretKey
+      : parsed.data.secretKey;
+  await saveTechnicalSettingsToDb({
+    ...current,
+    recaptcha: { siteKey: parsed.data.siteKey, secretKey },
+  });
+  revalidateTechnical();
+  return { ok: true };
+}
+
 const testMailSchema = z
   .string()
   .trim()
