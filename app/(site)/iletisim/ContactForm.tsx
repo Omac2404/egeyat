@@ -1,7 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
-import Script from "next/script";
+import { useActionState, useEffect, useRef } from "react";
 import { submitContact, type ContactState } from "@/app/actions/contact";
 
 declare global {
@@ -31,24 +30,35 @@ export function ContactForm({
   );
   const captchaBox = useRef<HTMLDivElement>(null);
   const widgetId = useRef<number | null>(null);
-  const [scriptReady, setScriptReady] = useState(false);
 
-  // Kutuyu yalnızca bir kez çiz; script yüklenmeden grecaptcha tanımlı değildir
+  // Script'i kendimiz ekleyip grecaptcha hazır olana kadar bekliyoruz;
+  // yükleme sırasına bağlı "kutu hiç çıkmadı" durumunu böyle eliyoruz.
   useEffect(() => {
-    if (!recaptchaSiteKey || !scriptReady) return;
-    const g = window.grecaptcha;
-    if (!g?.render) return;
-    const draw = () => {
-      if (captchaBox.current && widgetId.current === null) {
+    if (!recaptchaSiteKey) return;
+    const src = "https://www.google.com/recaptcha/api.js?render=explicit&hl=tr";
+    if (!document.querySelector(`script[src="${src}"]`)) {
+      const tag = document.createElement("script");
+      tag.src = src;
+      tag.async = true;
+      tag.defer = true;
+      document.head.appendChild(tag);
+    }
+    let tries = 0;
+    const timer = window.setInterval(() => {
+      const g = window.grecaptcha;
+      if (g?.render && captchaBox.current && widgetId.current === null) {
         widgetId.current = g.render(captchaBox.current, {
           sitekey: recaptchaSiteKey,
           hl: "tr",
         });
+        window.clearInterval(timer);
+      } else if (++tries > 150) {
+        // ~30 sn sonra vazgeç (script engellenmiş olabilir)
+        window.clearInterval(timer);
       }
-    };
-    if (typeof g.ready === "function") g.ready(draw);
-    else draw();
-  }, [recaptchaSiteKey, scriptReady]);
+    }, 200);
+    return () => window.clearInterval(timer);
+  }, [recaptchaSiteKey]);
 
   // Gönderim hatayla dönerse token tükenmiştir; kutuyu sıfırla
   useEffect(() => {
@@ -133,16 +143,7 @@ export function ContactForm({
           placeholder="İşleminizin detaylarını kısaca anlatın…"
         />
       </label>
-      {recaptchaSiteKey && (
-        <>
-          <Script
-            src="https://www.google.com/recaptcha/api.js?render=explicit&hl=tr"
-            strategy="afterInteractive"
-            onLoad={() => setScriptReady(true)}
-          />
-          <div ref={captchaBox} />
-        </>
-      )}
+      {recaptchaSiteKey && <div ref={captchaBox} className="min-h-[78px]" />}
       {state.error && (
         <p className="rounded-lg bg-red-50 px-4 py-2.5 text-sm text-red-700">
           {state.error}
