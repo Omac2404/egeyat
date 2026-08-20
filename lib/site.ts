@@ -8,7 +8,7 @@ export const site = {
   fax: "0232 425 47 42",
   gsm: ["0533 724 87 14", "0533 928 95 90"],
   whatsapp: "905339289590",
-  email: "egeyatcilik@egeyatcilik.net",
+  email: "egeyatcilik@egeyatcilik.com",
   instagram: "https://www.instagram.com/yatcilikege",
   mapsUrl: "https://maps.app.goo.gl/CqVmQwtKBZQnQN4G6",
   offices: [
@@ -23,8 +23,8 @@ export const site = {
         { label: "GSM", value: "0533 928 95 90", href: "tel:+905339289590" },
         {
           label: "E-posta",
-          value: "egeyatcilik@egeyatcilik.net",
-          href: "mailto:egeyatcilik@egeyatcilik.net",
+          value: "egeyatcilik@egeyatcilik.com",
+          href: "mailto:egeyatcilik@egeyatcilik.com",
         },
       ],
     },
@@ -36,8 +36,8 @@ export const site = {
         { label: "GSM", value: "0533 928 95 90", href: "tel:+905339289590" },
         {
           label: "E-posta",
-          value: "buket@egeyatcilik.net",
-          href: "mailto:buket@egeyatcilik.net",
+          value: "buket@egeyatcilik.com",
+          href: "mailto:buket@egeyatcilik.com",
         },
       ],
     },
