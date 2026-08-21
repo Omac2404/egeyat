@@ -8,7 +8,7 @@ export const site = {
   fax: "0232 425 47 42",
   gsm: ["0533 724 87 14", "0533 928 95 90"],
   whatsapp: "905339289590",
-  email: "egeyatcilik@egeyatcilik.com",
+  email: "egeyatcilik@egeyatcilik.net",
   instagram: "https://www.instagram.com/yatcilikege",
   mapsUrl: "https://maps.app.goo.gl/CqVmQwtKBZQnQN4G6",
   offices: [
