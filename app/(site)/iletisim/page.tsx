@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getContactSettings } from "@/lib/data/contact";
 import { getTechnicalSettings } from "@/lib/data/technical";
-import { lineHref } from "@/lib/contact-settings";
+import { lineLink } from "@/lib/contact-settings";
 import { PageHero } from "@/components/site/PageHero";
 import { Icon } from "@/components/site/Icon";
 import { ContactForm } from "./ContactForm";
@@ -45,21 +45,23 @@ export default async function ContactPage() {
               </p>
               <ul className="mt-4 space-y-2 text-sm">
                 {office.lines.map((line, i) => {
-                  const href = lineHref(line);
+                  const link = lineLink(line);
                   return (
-                    <li key={i} className="flex gap-2">
-                      <span className="w-14 shrink-0 font-semibold text-navy-500">
+                    <li key={i} className="flex gap-3">
+                      <span className="min-w-14 shrink-0 font-semibold text-navy-500">
                         {line.label}
                       </span>
-                      {href ? (
+                      {link ? (
                         <a
-                          href={href}
-                          className="font-medium text-navy-900 hover:text-orange-600"
+                          href={link.href}
+                          target={link.external ? "_blank" : undefined}
+                          rel={link.external ? "noopener noreferrer" : undefined}
+                          className="break-all font-medium text-navy-900 hover:text-orange-600"
                         >
-                          {line.value}
+                          {link.text}
                         </a>
                       ) : (
-                        <span className="font-medium text-navy-900">
+                        <span className="break-all font-medium text-navy-900">
                           {line.value}
                         </span>
                       )}

@@ -9,7 +9,7 @@ export const site = {
   gsm: ["0533 724 87 14", "0533 928 95 90"],
   whatsapp: "905339289590",
   email: "egeyatcilik@egeyatcilik.net",
-  instagram: "https://www.instagram.com/yatcilikege",
+  instagram: "https://www.instagram.com/egeyatcilik_",
   mapsUrl: "https://maps.app.goo.gl/CqVmQwtKBZQnQN4G6",
   offices: [
     {

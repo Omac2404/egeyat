@@ -198,7 +198,7 @@ export function ContactSettingsForm({ initial }: { initial: ContactSettings }) {
                         })
                       }
                       className={`${inputCls} min-w-0`}
-                      placeholder="Değer (numara / e-posta)"
+                      placeholder="Değer (numara / e-posta / web adresi)"
                     />
                     <button
                       type="button"
@@ -222,7 +222,7 @@ export function ContactSettingsForm({ initial }: { initial: ContactSettings }) {
                   }
                   className={smallBtnCls}
                 >
-                  + Satır Ekle (Tel, GSM, E-posta...)
+                  + Satır Ekle (Tel, GSM, E-posta, Instagram...)
                 </button>
               </div>
             </div>
